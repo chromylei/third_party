@@ -1,0 +1,82 @@
+diff -ipuwr -x config.log -x config.status -x config.cache -x '*.Po' -x '*.pot' jbigkit-1.6-orig/Makefile jbigkit-1.6/Makefile
+--- jbigkit-1.6-orig/Makefile	2004-06-11 20:05:26.000000000 +0200
++++ jbigkit-1.6/Makefile	2004-06-11 23:38:40.375000000 +0200
+@@ -5,7 +5,9 @@
+ CC = gcc
+ 
+ # Options for the compiler: A high optimization level is suggested
+-CCFLAGS = -O2 -W
++CCFLAGS = -D__GW32__ -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 \
++		-Wall -O3 -fms-extensions -mms-bitfields  -fno-exceptions -fomit-frame-pointer \
++		-march=i386 -mcpu=i686 -idirafter h:/glibc/include
+ #CCFLAGS = -O -g -W -Wall -ansi -pedantic #-DDEBUG  # developer only
+ 
+ CFLAGS = $(CCFLAGS) -I../libjbig
+@@ -19,7 +21,7 @@ lib:
+ 	(cd libjbig;  make "CC=$(CC)" "CFLAGS=$(CFLAGS)")
+ 
+ pbm: lib
+-	(cd pbmtools; make "CC=$(CC)" "CFLAGS=$(CFLAGS)")
++	(cd pbmtools; make "CC=$(CC)" "CFLAGS=$(CFLAGS)" "VERSION=$(VERSION)")
+ 
+ test: lib pbm
+ 	(cd libjbig;  make "CC=$(CC)" "CFLAGS=$(CFLAGS)" test)
+diff -ipuwr -x config.log -x config.status -x config.cache -x '*.Po' -x '*.pot' jbigkit-1.6-orig/libjbig/Makefile jbigkit-1.6/libjbig/Makefile
+--- jbigkit-1.6-orig/libjbig/Makefile	2004-06-08 16:40:06.000000000 +0200
++++ jbigkit-1.6/libjbig/Makefile	2004-06-11 23:34:05.046875000 +0200
+@@ -7,17 +7,20 @@ CC = gcc
+ # Options for the compiler: A high optimization level is suggested
+ CFLAGS = -O -Wall -ansi -pedantic
+ 
+-all: libjbig.a tstcodec
++all: libjbig.a jbig1.dll tstcodec
+ 
+ tstcodec: tstcodec.c jbig.c jbig.h jbig_tab.o
+ 	$(CC) $(CFLAGS) -o tstcodec -DTEST_CODEC tstcodec.c jbig.c \
+-	jbig_tab.o
++	jbig_tab.o -lstdbin -lbinmode
+ 
+ libjbig.a: jbig.o jbig_tab.o
+ 	rm -f libjbig.a
+ 	ar rc libjbig.a jbig.o jbig_tab.o
+ 	-ranlib libjbig.a
+ 
++jbig1.dll: jbig.o jbig_tab.o jbig-dllversion.o
++	o2dll -o $@ -l libjbig.dll.a $?
++
+ jbig.o: jbig.c jbig.h
+ 
+ test: tstcodec
+diff -ipuwr -x config.log -x config.status -x config.cache -x '*.Po' -x '*.pot' jbigkit-1.6-orig/pbmtools/Makefile jbigkit-1.6/pbmtools/Makefile
+--- jbigkit-1.6-orig/pbmtools/Makefile	2003-06-11 19:27:22.000000000 +0200
++++ jbigkit-1.6/pbmtools/Makefile	2004-06-11 23:40:15.140625000 +0200
+@@ -6,16 +6,25 @@ CC = gcc
+ 
+ # Options for the compiler
+ CFLAGS = -g -Wall -ansi -pedantic -I../libjbig
++LIBS = -lstdbin -lbinmode -L../libjbig -ljbig
++
++MAJOR=$(shell echo $(VERSION) | sed -e "s/\\..*$$//")
++MINOR=$(shell echo $(VERSION) | sed -e "s/^[^\\.]*\\.0*\\([^.]*\\).*$$/\\1/")
++LDFLAGS = -Wl,--major-image-version=$(MAJOR) -Wl,--minor-image-version=$(MINOR)
+ 
+ .SUFFIXES: .1 .5 .txt $(SUFFIXES)
+ 
++# Rule to make compiled resource (Windows)
++%-rc.o: %.rc
++	windres -i $< -o $@
++
+ all: pbmtojbg jbgtopbm pbmtojbg.txt jbgtopbm.txt pbm.txt pgm.txt
+ 
+-pbmtojbg: pbmtojbg.o ../libjbig/libjbig.a
+-	$(CC) $(CFLAGS) -o pbmtojbg pbmtojbg.o -L../libjbig -ljbig
++pbmtojbg: pbmtojbg.o pbmtojbg-rc.o ../libjbig/libjbig.a
++	$(CC) $(CFLAGS) $(LDFLAGS) -o pbmtojbg pbmtojbg.o pbmtojbg-rc.o $(LIBS)
+ 
+-jbgtopbm: jbgtopbm.o ../libjbig/libjbig.a
+-	$(CC) $(CFLAGS) -o jbgtopbm jbgtopbm.o -L../libjbig -ljbig
++jbgtopbm: jbgtopbm.o jbgtopbm-rc.o ../libjbig/libjbig.a
++	$(CC) $(CFLAGS) $(LDFLAGS) -o jbgtopbm jbgtopbm.o jbgtopbm-rc.o $(LIBS)
+ 
+ jbgtopbm.o: jbgtopbm.c ../libjbig/jbig.h
+ pbmtojbg.o: pbmtojbg.c ../libjbig/jbig.h

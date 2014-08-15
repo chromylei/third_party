@@ -1,0 +1,173 @@
+
+config("gli-config") {
+  include_dirs = ["src/"]
+}
+
+static_library("gli") {
+  sources = [
+    "src/gli/core/addressing.hpp",
+    "src/gli/core/addressing.inl",
+    "src/gli/core/clear.hpp",
+    "src/gli/core/clear.inl",
+    "src/gli/core/comparison.hpp",
+    "src/gli/core/comparison.inl",
+    "src/gli/core/copy.hpp",
+    "src/gli/core/copy.inl",
+    "src/gli/core/cow_ptr.hpp",
+    "src/gli/core/cow_ptr.inl",
+    "src/gli/core/dummy.cpp",
+    "src/gli/core/dx.hpp",
+    "src/gli/core/dx.inl",
+    "src/gli/core/fetch.hpp",
+    "src/gli/core/fetch.inl",
+    "src/gli/core/flip.hpp",
+    "src/gli/core/flip.inl",
+    "src/gli/core/format.hpp",
+    "src/gli/core/format.inl",
+    "src/gli/core/generate_mipmaps.hpp",
+    "src/gli/core/generate_mipmaps.inl",
+    "src/gli/core/gl.hpp",
+    "src/gli/core/gl.inl",
+    "src/gli/core/header.hpp",
+    "src/gli/core/header.inl",
+    "src/gli/core/image.hpp",
+    "src/gli/core/image.inl",
+    "src/gli/core/load_dds.hpp",
+    "src/gli/core/load_dds.inl",
+    "src/gli/core/operation.hpp",
+    "src/gli/core/operation.inl",
+    "src/gli/core/operator.hpp",
+    "src/gli/core/operator.inl",
+    "src/gli/core/save_dds.hpp",
+    "src/gli/core/save_dds.inl",
+    "src/gli/core/shared_array.hpp",
+    "src/gli/core/shared_array.inl",
+    "src/gli/core/shared_ptr.hpp",
+    "src/gli/core/shared_ptr.inl",
+    "src/gli/core/storage.hpp",
+    "src/gli/core/storage.inl",
+    "src/gli/core/texture.hpp",
+    "src/gli/core/texture1d.hpp",
+    "src/gli/core/texture1d.inl",
+    "src/gli/core/texture1d_array.hpp",
+    "src/gli/core/texture1d_array.inl",
+    "src/gli/core/texture2d.hpp",
+    "src/gli/core/texture2d.inl",
+    "src/gli/core/texture2d_array.hpp",
+    "src/gli/core/texture2d_array.inl",
+    "src/gli/core/texture3d.hpp",
+    "src/gli/core/texture3d.inl",
+    "src/gli/core/texture_cube.hpp",
+    "src/gli/core/texture_cube.inl",
+    "src/gli/core/texture_cube_array.hpp",
+    "src/gli/core/texture_cube_array.inl",
+    "src/gli/core/view.hpp",
+    "src/gli/core/view.inl",
+    "src/gli/gli.hpp",
+  ]
+
+  direct_dependent_configs = [":gli-config"]
+  deps = ["//third_party/glm:glm"]
+  forward_dependent_configs_from = deps
+}
+
+test("gli_core_test") {
+  sources = ["src/test/core/core.cpp"] deps = [":gli"]
+}
+
+test("gli_core_addressing_test") {
+  sources = ["src/test/core/core_addressing.cpp"] deps = [":gli"]
+}
+
+test("gli_core_clear_test") {
+  sources = ["src/test/core/core_clear.cpp"] deps = [":gli"]
+}
+
+test("gli_core_comparison_test") {
+  sources = ["src/test/core/core_comparison.cpp"] deps = [":gli"]
+}
+
+test("gli_core_copy_test") {
+  sources = ["src/test/core/core_copy.cpp"] deps = [":gli"]
+}
+
+
+test("gli_core_cow_ptr_test") {
+  sources = ["src/test/core/core_cow_ptr.cpp"] deps = [":gli"]
+}
+
+test("gli_core_fetch_test") {
+  sources = ["src/test/core/core_fetch.cpp"] deps = [":gli"]
+}
+
+test("gli_core_flip_test") {
+  sources = ["src/test/core/core_flip.cpp"] deps = [":gli"]
+}
+
+test("gli_core_generate_mipmaps_test") {
+  sources = ["src/test/core/core_generate_mipmaps.cpp"] deps = [":gli"]
+}
+
+test("gli_core_image_test") {
+  sources = ["src/test/core/core_image.cpp"] deps = [":gli"]
+}
+
+test("gli_core_sample_test") {
+  sources = ["src/test/core/core_sample.cpp"] deps = [":gli"]
+}
+
+test("gli_core_shared_ptr_test") {
+  sources = ["src/test/core/core_shared_ptr.cpp"] deps = [":gli"]
+}
+
+test("gli_core_storage_test") {
+  sources = ["src/test/core/core_storage.cpp"] deps = [":gli"]
+}
+
+test("gli_core_texture_1d_test") {
+  sources = ["src/test/core/core_texture_1d.cpp"] deps = [":gli"]
+}
+
+test("gli_core_texture_2d_test") {
+  sources = ["src/test/core/core_texture_2d.cpp"] deps = [":gli"]
+}
+
+test("gli_core_texture_3d_test") {
+  sources = ["src/test/core/core_texture_3d.cpp"] deps = [":gli"]
+}
+
+test("gli_core_texture_cube_test") {
+  sources = ["src/test/core/core_texture_cube.cpp"] deps = [":gli"]
+}
+
+test("gli_core_texture_cube_array_test") {
+  sources = ["src/test/core/core_texture_cube_array.cpp"] deps = [":gli"]
+}
+
+test("gli_core_view_test") {
+  sources = ["src/test/core/core_view.cpp"] deps = [":gli"]
+}
+
+group("gli-tests") {
+  deps = [
+    ":gli_core_test",
+    ":gli_core_addressing_test",
+    ":gli_core_clear_test",
+    ":gli_core_comparison_test",
+    ":gli_core_copy_test",
+    ":gli_core_cow_ptr_test",
+    ":gli_core_fetch_test",
+    ":gli_core_flip_test",
+    ":gli_core_generate_mipmaps_test",
+    ":gli_core_image_test",
+    ":gli_core_sample_test",
+    ":gli_core_shared_ptr_test",
+    ":gli_core_storage_test",
+    ":gli_core_texture_1d_test",
+    ":gli_core_texture_2d_test",
+    ":gli_core_texture_3d_test",
+    ":gli_core_texture_cube_test",
+    ":gli_core_texture_cube_array_test",
+    ":gli_core_view_test",
+  ]
+}

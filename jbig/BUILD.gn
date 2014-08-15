@@ -1,0 +1,12 @@
+
+config("jbig_config") {
+  include_dirs = ["src/libjbig"]
+}
+
+static_library("jbig") {
+  sources = [
+    "src/libjbig/jbig.c"
+    "src/libjbig/jbig_tab.c"
+  ]
+  direct_dependent_configs = [":jbig_config"]
+}

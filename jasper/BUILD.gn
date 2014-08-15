@@ -1,0 +1,73 @@
+config("jasper-config") {
+  include_dirs = ["src/src/libjasper/include"]
+  defines = ["JAS_WIN_MSVC_BUILD"]
+}
+
+static_library("libjasper") {
+  sources = [
+    "src/src/libjasper/base/jas_cm.c"
+    "src/src/libjasper/base/jas_debug.c"
+    "src/src/libjasper/base/jas_getopt.c"
+    "src/src/libjasper/base/jas_icc.c"
+    "src/src/libjasper/base/jas_iccdata.c"
+    "src/src/libjasper/base/jas_image.c"
+    "src/src/libjasper/base/jas_init.c"
+    "src/src/libjasper/base/jas_malloc.c"
+    "src/src/libjasper/base/jas_seq.c"
+    "src/src/libjasper/base/jas_stream.c"
+    "src/src/libjasper/base/jas_string.c"
+    "src/src/libjasper/base/jas_tmr.c"
+    "src/src/libjasper/base/jas_tvp.c"
+    "src/src/libjasper/base/jas_version.c"
+    "src/src/libjasper/bmp/bmp_cod.c"
+    "src/src/libjasper/bmp/bmp_dec.c"
+    "src/src/libjasper/bmp/bmp_enc.c"
+    # "src/src/libjasper/dummy.c"
+    "src/src/libjasper/jp2/jp2_cod.c"
+    "src/src/libjasper/jp2/jp2_dec.c"
+    "src/src/libjasper/jp2/jp2_enc.c"
+    "src/src/libjasper/jpc/jpc_bs.c"
+    "src/src/libjasper/jpc/jpc_cs.c"
+    "src/src/libjasper/jpc/jpc_dec.c"
+    "src/src/libjasper/jpc/jpc_enc.c"
+    "src/src/libjasper/jpc/jpc_math.c"
+    "src/src/libjasper/jpc/jpc_mct.c"
+    "src/src/libjasper/jpc/jpc_mqcod.c"
+    "src/src/libjasper/jpc/jpc_mqdec.c"
+    "src/src/libjasper/jpc/jpc_mqenc.c"
+    "src/src/libjasper/jpc/jpc_qmfb.c"
+    "src/src/libjasper/jpc/jpc_t1cod.c"
+    "src/src/libjasper/jpc/jpc_t1dec.c"
+    "src/src/libjasper/jpc/jpc_t1enc.c"
+    "src/src/libjasper/jpc/jpc_t2cod.c"
+    "src/src/libjasper/jpc/jpc_t2dec.c"
+    "src/src/libjasper/jpc/jpc_t2enc.c"
+    "src/src/libjasper/jpc/jpc_tagtree.c"
+    "src/src/libjasper/jpc/jpc_tsfb.c"
+    "src/src/libjasper/jpc/jpc_util.c"
+    "src/src/libjasper/jpg/jpg_dec.c"
+    # "src/src/libjasper/jpg/jpg_dummy.c"
+    "src/src/libjasper/jpg/jpg_enc.c"
+    "src/src/libjasper/jpg/jpg_val.c"
+    "src/src/libjasper/mif/mif_cod.c"
+    "src/src/libjasper/pgx/pgx_cod.c"
+    "src/src/libjasper/pgx/pgx_dec.c"
+    "src/src/libjasper/pgx/pgx_enc.c"
+    "src/src/libjasper/pnm/pnm_cod.c"
+    "src/src/libjasper/pnm/pnm_dec.c"
+    "src/src/libjasper/pnm/pnm_enc.c"
+    "src/src/libjasper/ras/ras_cod.c"
+    "src/src/libjasper/ras/ras_dec.c"
+    "src/src/libjasper/ras/ras_enc.c"
+  ]
+
+  deps = ["//third_party/libjpeg:libjpeg"]
+  direct_dependent_configs = [":jasper-config"]
+  defines = []
+
+  if (is_win) {
+    defines += [
+      "JAS_WIN_MSVC_BUILD"
+    ]
+  }
+}

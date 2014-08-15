@@ -1,0 +1,300 @@
+(cd libjbig;  make "CC=gcc" "CFLAGS=-D__GW32__ -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -O3 -fms-extensions -mms-bitfields  -fno-exceptions -fomit-frame-pointer -march=i386 -mcpu=i686 -idirafter h:/glibc/include -I../libjbig")
+make[1]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/libjbig'
+make[1]: Niets te doen voor `all'.
+make[1]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/libjbig'
+(cd pbmtools; make "CC=gcc" "CFLAGS=-D__GW32__ -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -O3 -fms-extensions -mms-bitfields  -fno-exceptions -fomit-frame-pointer -march=i386 -mcpu=i686 -idirafter h:/glibc/include -I../libjbig")
+make[1]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make[1]: Niets te doen voor `all'.
+make[1]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+(cd libjbig;  make "CC=gcc" "CFLAGS=-D__GW32__ -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -O3 -fms-extensions -mms-bitfields  -fno-exceptions -fomit-frame-pointer -march=i386 -mcpu=i686 -idirafter h:/glibc/include -I../libjbig" test)
+make[1]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/libjbig'
+./tstcodec
+
+Automatic JBIG Compatibility Test Suite
+---------------------------------------
+
+JBIG-KIT Version 1.6 -- This test will take a few minutes.
+
+
+1) Arithmetic encoder test sequence from ITU-T T.82, clause 7.1
+---------------------------------------------------------------
+
+result of encoder:
+  6989995c32eafaa0d5ff00527fff00ff00ff00c00000003fff002d208291
+expected result:
+  6989995c32eafaa0d5ff00527fff00ff00ff00c00000003fff002d208291
+
+Test 1: PASSED
+
+2) Arithmetic decoder test sequence from ITU-T T.82, clause 7.1
+---------------------------------------------------------------
+
+Test 2.1: Decoding whole chunk ...
+Test result: PASSED
+
+Test 2.2: Decoding with single byte feed ...
+Test result: PASSED
+
+3) Parametric algorithm test sequence from ITU-T T.82, clause 7.2
+-----------------------------------------------------------------
+
+Generating test image ...
+
+Test 3.1: TPBON=0, Mx=0, LRLTWO=0, L0=1951
+
+Test 3.1.1: Encoding ...
+Encoded BIE has 317384 bytes: PASSED
+Test 3.1.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 3.1.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 3.2: TPBON=0, Mx=0, LRLTWO=1, L0=1951
+
+Test 3.2.1: Encoding ...
+Encoded BIE has 317132 bytes: PASSED
+Test 3.2.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 3.2.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 3.3: TPBON=1, DPON=1, TPDON=1, Mx=8, LRLTWO=0, L0=128
+
+Test 3.3.1: Encoding ...
+Encoded BIE has 253653 bytes: PASSED
+Test 3.3.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 3.3.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 3.4: TPBON=1, DPON=1, TPDON=1, Mx=8, LRLTWO=0, L0=2, 6 layers
+
+Test 3.4.1: Encoding ...
+Encoded BIE has 279314 bytes: PASSED
+Test 3.4.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 3.4.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+4) Additional regression tests
+------------------------------
+
+Test 4.1: order=0, 0 layers, 4 planes
+Test 4.1.1: Encoding ...
+Encoded BIE has    247 bytes: 
+Test 4.1.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.1.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.2: order=2, 0 layers, 4 planes
+Test 4.2.1: Encoding ...
+Encoded BIE has    247 bytes: 
+Test 4.2.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.2.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.3: order=3, 0 layers, 4 planes
+Test 4.3.1: Encoding ...
+Encoded BIE has    247 bytes: 
+Test 4.3.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.3.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.4: order=0, 1 layers, 4 planes
+Test 4.4.1: Encoding ...
+Encoded BIE has    323 bytes: 
+Test 4.4.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.4.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.5: order=2, 1 layers, 4 planes
+Test 4.5.1: Encoding ...
+Encoded BIE has    323 bytes: 
+Test 4.5.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.5.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.6: order=3, 1 layers, 4 planes
+Test 4.6.1: Encoding ...
+Encoded BIE has    323 bytes: 
+Test 4.6.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.6.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.7: order=0, 2 layers, 4 planes
+Test 4.7.1: Encoding ...
+Encoded BIE has    320 bytes: 
+Test 4.7.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.7.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.8: order=2, 2 layers, 4 planes
+Test 4.8.1: Encoding ...
+Encoded BIE has    320 bytes: 
+Test 4.8.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.8.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.9: order=3, 2 layers, 4 planes
+Test 4.9.1: Encoding ...
+Encoded BIE has    320 bytes: 
+Test 4.9.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.9.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.10: order=0, 3 layers, 4 planes
+Test 4.10.1: Encoding ...
+Encoded BIE has    308 bytes: 
+Test 4.10.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.10.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.11: order=2, 3 layers, 4 planes
+Test 4.11.1: Encoding ...
+Encoded BIE has    308 bytes: 
+Test 4.11.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.11.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+Test 4.12: order=3, 3 layers, 4 planes
+Test 4.12.1: Encoding ...
+Encoded BIE has    308 bytes: 
+Test 4.12.2: Decoding whole chunk ...
+Image comparison: PASSED
+Test 4.12.3: Decoding with single-byte feed ...
+Image comparison: PASSED
+
+
+Test result summary: the library has PASSED the test suite.
+
+Congratulations, everything is fine.
+
+make[1]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/libjbig'
+(cd pbmtools; make "CC=gcc" "CFLAGS=-D__GW32__ -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -O3 -fms-extensions -mms-bitfields  -fno-exceptions -fomit-frame-pointer -march=i386 -mcpu=i686 -idirafter h:/glibc/include -I../libjbig" test)
+make[1]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=ccitt1     OPTIONSJ=      OPTIONSP=       dotest1
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./jbgtopbm  ../examples/ccitt1.jbg test-ccitt1.pbm
+./pbmtojbg  test-ccitt1.pbm test-ccitt1.jbg
+cmp test-ccitt1.jbg ../examples/ccitt1.jbg
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=ccitt2     OPTIONSJ=      OPTIONSP=       dotest1
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./jbgtopbm  ../examples/ccitt2.jbg test-ccitt2.pbm
+./pbmtojbg  test-ccitt2.pbm test-ccitt2.jbg
+cmp test-ccitt2.jbg ../examples/ccitt2.jbg
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=ccitt3     OPTIONSJ=      OPTIONSP=       dotest1
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./jbgtopbm  ../examples/ccitt3.jbg test-ccitt3.pbm
+./pbmtojbg  test-ccitt3.pbm test-ccitt3.jbg
+cmp test-ccitt3.jbg ../examples/ccitt3.jbg
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=xvlogo     OPTIONSJ=     "OPTIONSP=-d 3"  dotest1
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./jbgtopbm  ../examples/xvlogo.jbg test-xvlogo.pbm
+./pbmtojbg -d 3 test-xvlogo.pbm test-xvlogo.jbg
+cmp test-xvlogo.jbg ../examples/xvlogo.jbg
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=sandra     OPTIONSP=      OPTIONSJ=       dotest2g
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg  ../examples/sandra.pgm test-sandra.jbg
+./jbgtopbm  test-sandra.jbg test-sandra.pgm
+cmp test-sandra.pgm ../examples/sandra.pgm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=sandra     OPTIONSP=-b    OPTIONSJ=-b     dotest2g
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -b ../examples/sandra.pgm test-sandra.jbg
+./jbgtopbm -b test-sandra.jbg test-sandra.pgm
+cmp test-sandra.pgm ../examples/sandra.pgm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=sandra     OPTIONSP=-q    OPTIONSJ=       dotest2g
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -q ../examples/sandra.pgm test-sandra.jbg
+./jbgtopbm  test-sandra.jbg test-sandra.pgm
+cmp test-sandra.pgm ../examples/sandra.pgm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=sandra    "OPTIONSP=-o 0" OPTIONSJ=       dotest2g
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -o 0 ../examples/sandra.pgm test-sandra.jbg
+./jbgtopbm  test-sandra.jbg test-sandra.pgm
+cmp test-sandra.pgm ../examples/sandra.pgm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=sandra    "OPTIONSP=-o 2" OPTIONSJ=       dotest2g
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -o 2 ../examples/sandra.pgm test-sandra.jbg
+./jbgtopbm  test-sandra.jbg test-sandra.pgm
+cmp test-sandra.pgm ../examples/sandra.pgm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=multi      OPTIONSP=      OPTIONSJ=       dotest2g
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg  ../examples/multi.pgm test-multi.jbg
+./jbgtopbm  test-multi.jbg test-multi.pgm
+cmp test-multi.pgm ../examples/multi.pgm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=multi      OPTIONSP=-b    OPTIONSJ=-b     dotest2g
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -b ../examples/multi.pgm test-multi.jbg
+./jbgtopbm -b test-multi.jbg test-multi.pgm
+cmp test-multi.pgm ../examples/multi.pgm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=mx        "OPTIONSP=-q -s 3 -m 128"       dotest1
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./jbgtopbm  ../examples/mx.jbg test-mx.pbm
+./pbmtojbg -q -s 3 -m 128 test-mx.pbm test-mx.jbg
+cmp test-mx.jbg ../examples/mx.jbg
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=mx        "OPTIONSP=-q -s 3 -m 128"       dotest2b
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -q -s 3 -m 128 test-mx.pbm test-mx.jbg
+./jbgtopbm  test-mx.jbg test-mx-2.pbm
+cmp test-mx.pbm test-mx-2.pbm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=mx        "OPTIONSP=-q -s 3 -m 128 -p 92" dotest2b
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -q -s 3 -m 128 -p 92 test-mx.pbm test-mx.jbg
+./jbgtopbm  test-mx.jbg test-mx-2.pbm
+cmp test-mx.pbm test-mx-2.pbm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=mx        "OPTIONSP=-q -Y -1"             dotest2b
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -q -Y -1 test-mx.pbm test-mx.jbg
+./jbgtopbm  test-mx.jbg test-mx-2.pbm
+cmp test-mx.pbm test-mx-2.pbm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+make IMG=mx        "OPTIONSP=-Y -1"                dotest2b
+make[2]: Entering directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+./pbmtojbg -Y -1 test-mx.pbm test-mx.jbg
+./jbgtopbm  test-mx.jbg test-mx-2.pbm
+cmp test-mx.pbm test-mx-2.pbm
+make[2]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'
+rm -f test-*.jbg test-*.pbm test-*.pgm
+./jbgtopbm ../examples/ccitt1.jbg | ./pbmtojbg > test-ccitt1.jbg
+cmp ../examples/ccitt1.jbg test-ccitt1.jbg
+rm -f test-*.jbg test-*.pbm test-*.pgm
+./jbgtopbm < ../examples/ccitt1.jbg | ./pbmtojbg - test-ccitt1.jbg
+cmp ../examples/ccitt1.jbg test-ccitt1.jbg
+rm -f test-*.jbg test-*.pbm test-*.pgm
+./jbgtopbm < ../examples/ccitt1.jbg - test-ccitt1.pbm ; \
+  ./pbmtojbg test-ccitt1.pbm test-ccitt1.jbg
+cmp ../examples/ccitt1.jbg test-ccitt1.jbg
+rm -f test-*.jbg test-*.pbm test-*.pgm
+./jbgtopbm ../examples/ccitt1.jbg test-ccitt1.pbm ; \
+  ./pbmtojbg test-ccitt1.pbm >test-ccitt1.jbg
+cmp ../examples/ccitt1.jbg test-ccitt1.jbg
+rm -f test-*.jbg test-*.pbm test-*.pgm
+
+The pbmtools have PASSED the functional tests. Good!
+
+make[1]: Leaving directory `/cygdrive/k/graphics/jbigkit/1.6/jbigkit-1.6/pbmtools'

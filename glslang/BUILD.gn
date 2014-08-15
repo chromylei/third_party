@@ -1,0 +1,99 @@
+import("//build/templates/bison.gni")
+
+config("glslang-config") {
+  include_dirs = ["src/glslang/"]
+  if (is_win) {
+    include_dirs += ["src/glslang/OSDependent/Windows/"]
+  } else if (is_linux) {
+    include_dirs += ["src/glslang/OSDependent/Linux/"]
+  }
+}
+
+bison("glslang-tokenizer") {
+  cpp = "glslang_tab.cpp"
+  hpp = "glslang_tab.cpp.h"
+  source = "src/glslang/MachineIndependent/glslang.y"
+  bison_flags = ["-t"]
+  bison_include_dirs = ["src/glslang/MachineIndependent"]
+}
+
+static_library("glslang") {
+  sources = [
+    "src/OGLCompilersDLL/InitializeDll.cpp",
+    "src/OGLCompilersDLL/InitializeDll.h",
+    "src/glslang/Include/BaseTypes.h",
+    "src/glslang/Include/Common.h",
+    "src/glslang/Include/ConstantUnion.h",
+    "src/glslang/Include/InfoSink.h",
+    "src/glslang/Include/InitializeGlobals.h",
+    "src/glslang/Include/PoolAlloc.h",
+    "src/glslang/Include/ResourceLimits.h",
+    "src/glslang/Include/ShHandle.h",
+    "src/glslang/Include/Types.h",
+    "src/glslang/Include/intermediate.h",
+    "src/glslang/MachineIndependent/InfoSink.cpp",
+    "src/glslang/MachineIndependent/Initialize.cpp",
+    "src/glslang/MachineIndependent/Initialize.h",
+    "src/glslang/MachineIndependent/IntermTraverse.cpp",
+    "src/glslang/MachineIndependent/Intermediate.cpp",
+    "src/glslang/MachineIndependent/ParseHelper.cpp",
+    "src/glslang/MachineIndependent/ParseHelper.h",
+    "src/glslang/MachineIndependent/PoolAlloc.cpp",
+    "src/glslang/MachineIndependent/RemoveTree.cpp",
+    "src/glslang/MachineIndependent/RemoveTree.h",
+    "src/glslang/MachineIndependent/Scan.cpp",
+    "src/glslang/MachineIndependent/Scan.h",
+    "src/glslang/MachineIndependent/ScanContext.h",
+    "src/glslang/MachineIndependent/ShaderLang.cpp",
+    "src/glslang/MachineIndependent/SymbolTable.cpp",
+    "src/glslang/MachineIndependent/SymbolTable.h",
+    "src/glslang/MachineIndependent/Versions.cpp",
+    "src/glslang/MachineIndependent/Versions.h",
+    "src/glslang/MachineIndependent/intermOut.cpp",
+    "src/glslang/MachineIndependent/limits.cpp",
+    "src/glslang/MachineIndependent/linkValidate.cpp",
+    "src/glslang/MachineIndependent/localintermediate.h",
+    "src/glslang/MachineIndependent/parseConst.cpp",
+    "src/glslang/MachineIndependent/preprocessor/Pp.cpp",
+    "src/glslang/MachineIndependent/preprocessor/PpAtom.cpp",
+    "src/glslang/MachineIndependent/preprocessor/PpContext.cpp",
+    "src/glslang/MachineIndependent/preprocessor/PpContext.h",
+    "src/glslang/MachineIndependent/preprocessor/PpMemory.cpp",
+    "src/glslang/MachineIndependent/preprocessor/PpScanner.cpp",
+    "src/glslang/MachineIndependent/preprocessor/PpSymbols.cpp",
+    "src/glslang/MachineIndependent/preprocessor/PpTokens.cpp",
+    "src/glslang/MachineIndependent/preprocessor/PpTokens.h",
+    "src/glslang/MachineIndependent/reflection.cpp",
+    "src/glslang/MachineIndependent/reflection.h",
+    "src/glslang/MachineIndependent/unistd.h",
+    "src/glslang/Public/ShaderLang.h",
+    "src/glslang/MachineIndependent/Constant.cpp",
+    "src/glslang/GenericCodeGen/Link.cpp",
+    "src/glslang/GenericCodeGen/CodeGen.cpp",
+  ]
+
+  if (is_win) {
+    sources += [
+      "src/glslang/OSDependent/Windows/main.cpp",
+      "src/glslang/OSDependent/Windows/ossource.cpp",
+      "src/glslang/OSDependent/Windows/osinclude.h",
+    ]
+  } else if (is_linux) {
+    sources += [
+      "src/glslang/OSDependent/Linux/osinclude.h",
+      "src/glslang/OSDependent/Linux/ossource.cpp",
+    ]
+  }
+
+  deps = [":glslang-tokenizer"]
+  direct_dependent_configs = [":glslang-config"]
+  include_dirs = [
+    "src/OGLCompilersDLL",
+    "src/glslang/MachineIndependent",
+  ]
+}
+
+executable("glslang_standalone") {
+  sources = ["src/StandAlone/StandAlone.cpp"]
+  deps = [":glslang"]
+}

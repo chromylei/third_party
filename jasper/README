@@ -1,0 +1,42 @@
+The JasPer Project Home Page
+
+Overview
+
+The JasPer Project is an open-source initiative to provide a free software-based reference implementation of the codec specified in the JPEG-2000 Part-1 standard (i.e., ISO/IEC 15444-1). This project was started as a collaborative effort between Image Power, Inc. and the University of British Columbia. Presently, the ongoing maintenance and development of the JasPer software is being coordinated by its principal author, Michael Adams, who is affiliated with the Digital Signal Processing Group (DSPG) in the Department of Electrical and Computer Engineering at the University of Victoria.
+
+JasPer includes a software-based implementation of the codec specified in the JPEG-2000 Part-1 standard (i.e., ISO/IEC 15444-1). The JasPer software is written in the C programming language. More details about this software can be found in the JasPer Software Reference Manual.
+
+The JasPer software has been included in the JPEG-2000 Part-5 standard (i.e., ISO/IEC 15444-5), as an official reference implementation of the JPEG-2000 Part-1 codec. This software has also been incorporated into numerous other software projects (some commercial and some non-commercial). Some projects known to use JasPer include:
+
+K Desktop Environment (as of version 3.2)
+Kopete
+Ghostscript
+ImageMagick
+Netpbm (as of Release 10.12)
+XnView
+Photoline 32
+Konvertor
+OpenCV
+Prophecy SDK
+Meesoft's Image Analyzer
+SlowView
+AYTTM
+Cximage
+ImgSource
+Regeemy
+OpenSceneGraph Project
+QJp2IO. JasPer wrapper for Qt.
+BorJas. JasPer wrapper for Borland C++ Builder.
+TIFF Codec Driver. TIFF driver for JasPer library.
+GeoJasper. GeoJasper is the first in the world FREE Geo supporting command line transcoder between JPEG2000 and other formats.
+UniView
+Labplot
+GRIB
+GraphicsMagick
+RAVL
+RealWorld Icon Editor
+GYachI. A Yahoo-messenger client.
+libsecondlife
+MATLAB toolbox for JasPer
+Ziproxy (Ziproxy is forwarding, non-caching, compressing HTTP proxy server.)
+(Incidentally, if you are aware of any projects utilizing the JasPer software that are not listed above, please let Michael Adams know so that he can add them to the list.)
