@@ -1,0 +1,382 @@
+config("ilmimf-config") {
+  include_dirs = [
+    "ilmimf/"
+    "ilmimf/IlmImf"
+    "ilmimf/config.windows"
+  ]
+
+  defines = ["OPENEXR_DLL"]
+}
+
+config("ilmbase-config") {
+  dir = rebase_path(target_gen_dir, root_out_dir, ".")
+  include_dirs = [
+    "ilmbase/"
+    "ilmbase/Half"
+    "ilmbase/Iex"
+    "ilmbase/IlmThread"
+    "ilmbase/Imath"
+    "ilmbase/config.windows"
+    "$dir/Half"
+  ]
+  defines = ["OPENEXR_DLL" "PLATFORM_WINDOWS"]
+}
+
+executable("tofloat") {
+  hard_dep = true
+  sources = ["ilmbase/Half/toFloat.cpp"]
+}
+
+executable("elut") {
+  hard_dep = true
+  sources = ["ilmbase/Half/elut.cpp"]
+}
+
+custom("gen_tofloat_h") {
+  hard_dep = true
+  dir = rebase_path(target_gen_dir, root_out_dir, ".")
+  script = "//build/tools/shell/run2.py"
+  outputs = ["$dir/Half/toFloat.h"]
+  args = [
+    rebase_path("$root_out_dir/toFloat.exe", root_out_dir, "."),
+    ">"
+    "$dir/Half/toFloat.h"
+  ]
+  deps = [":tofloat"]
+}
+
+
+custom("gen_elut_h") {
+  hard_dep = true
+  dir = rebase_path(target_gen_dir, root_out_dir, ".")
+  script = "//build/tools/shell/run2.py"
+  outputs = ["$dir/Half/elut.h"]
+  args = [
+    rebase_path("$root_out_dir/elut.exe", root_out_dir, "."),
+    ">"
+    "$dir/Half/elut.h"
+  ]
+  deps = [":elut"]
+}
+
+component("ilmhalf") {
+  sources = [
+    "ilmbase\Half\half.cpp"
+    "ilmbase\Half\half.h"
+    "ilmbase\Half\halfFunction.h"
+    "ilmbase\Half\halfLimits.h"
+  ]
+
+  defines = ["HALF_EXPORTS"]
+  direct_dependent_configs = [":ilmbase-config"]
+  deps = [":gen_tofloat_h", ":gen_elut_h"]
+}
+
+component("ilmiex") {
+  sources = [
+    "ilmbase\Iex\IexBaseExc.cpp"
+    "ilmbase\Iex\IexThrowErrnoExc.cpp"
+    "ilmbase\Iex\Iex.h"
+    "ilmbase\Iex\IexBaseExc.h"
+    "ilmbase\Iex\IexErrnoExc.h"
+    "ilmbase\Iex\IexMacros.h"
+    "ilmbase\Iex\IexMathExc.h"
+    "ilmbase\Iex\IexThrowErrnoExc.h"
+  ]
+
+  defines = ["IEX_EXPORTS"]
+  direct_dependent_configs = [":ilmbase-config"]
+}
+
+component("ilmthread") {
+  sources = [
+    "ilmbase\IlmThread\IlmThread.cpp"
+    "ilmbase\IlmThread\IlmThreadMutex.cpp"
+    "ilmbase\IlmThread\IlmThreadMutexPosix.cpp"
+    "ilmbase\IlmThread\IlmThreadMutexWin32.cpp"
+    "ilmbase\IlmThread\IlmThreadPool.cpp"
+    "ilmbase\IlmThread\IlmThreadPosix.cpp"
+    "ilmbase\IlmThread\IlmThreadSemaphore.cpp"
+    "ilmbase\IlmThread\IlmThreadSemaphorePosix.cpp"
+    "ilmbase\IlmThread\IlmThreadSemaphorePosixCompat.cpp"
+    "ilmbase\IlmThread\IlmThreadSemaphoreWin32.cpp"
+    "ilmbase\IlmThread\IlmThreadWin32.cpp"
+    "ilmbase\IlmThread\IlmThread.h"
+    "ilmbase\IlmThread\IlmThreadMutex.h"
+    "ilmbase\IlmThread\IlmThreadPool.h"
+    "ilmbase\IlmThread\IlmThreadSemaphore.h"
+  ]
+
+  deps = [":ilmiex"]
+  defines = ["ILMTHREAD_EXPORTS"]
+  direct_dependent_configs = [":ilmbase-config"]
+}
+
+component("ilmmath") {
+  sources = [
+    "ilmbase\Imath\ImathBox.cpp"
+    "ilmbase\Imath\ImathColorAlgo.cpp"
+    "ilmbase\Imath\ImathFun.cpp"
+    "ilmbase\Imath\ImathMatrixAlgo.cpp"
+    "ilmbase\Imath\ImathRandom.cpp"
+    "ilmbase\Imath\ImathShear.cpp"
+    "ilmbase\Imath\ImathVec.cpp"
+    "ilmbase\Imath\ImathBox.h"
+    "ilmbase\Imath\ImathBoxAlgo.h"
+    "ilmbase\Imath\ImathColor.h"
+    "ilmbase\Imath\ImathColorAlgo.h"
+    "ilmbase\Imath\ImathEuler.h"
+    "ilmbase\Imath\ImathExc.h"
+    "ilmbase\Imath\ImathFrame.h"
+    "ilmbase\Imath\ImathFrustum.h"
+    "ilmbase\Imath\ImathFrustumTest.h"
+    "ilmbase\Imath\ImathFun.h"
+    "ilmbase\Imath\ImathGL.h"
+    "ilmbase\Imath\ImathGLU.h"
+    "ilmbase\Imath\ImathHalfLimits.h"
+    "ilmbase\Imath\ImathInt64.h"
+    "ilmbase\Imath\ImathInterval.h"
+    "ilmbase\Imath\ImathLimits.h"
+    "ilmbase\Imath\ImathLine.h"
+    "ilmbase\Imath\ImathLineAlgo.h"
+    "ilmbase\Imath\ImathMath.h"
+    "ilmbase\Imath\ImathMatrix.h"
+    "ilmbase\Imath\ImathMatrixAlgo.h"
+    "ilmbase\Imath\ImathPlane.h"
+    "ilmbase\Imath\ImathPlatform.h"
+    "ilmbase\Imath\ImathQuat.h"
+    "ilmbase\Imath\ImathRandom.h"
+    "ilmbase\Imath\ImathRoots.h"
+    "ilmbase\Imath\ImathShear.h"
+    "ilmbase\Imath\ImathSphere.h"
+    "ilmbase\Imath\ImathVec.h"
+    "ilmbase\Imath\ImathVecAlgo.h"
+  ]
+
+  deps = [":ilmiex"]
+  defines = ["IMATH_EXPORTS"]
+  direct_dependent_configs = [":ilmbase-config"]
+}
+
+component("ilmimf") {
+  sources = [
+    "ilmimf/IlmImf/b44ExpLogTable.cpp"
+    "ilmimf/IlmImf/b44ExpLogTable.h"
+    "ilmimf/IlmImf/CMakeLists.txt"
+    "ilmimf/IlmImf/ImfAcesFile.cpp"
+    "ilmimf/IlmImf/ImfAcesFile.h"
+    "ilmimf/IlmImf/ImfArray.h"
+    "ilmimf/IlmImf/ImfAttribute.cpp"
+    "ilmimf/IlmImf/ImfAttribute.h"
+    "ilmimf/IlmImf/ImfAutoArray.h"
+    "ilmimf/IlmImf/ImfB44Compressor.cpp"
+    "ilmimf/IlmImf/ImfB44Compressor.h"
+    "ilmimf/IlmImf/ImfBoxAttribute.cpp"
+    "ilmimf/IlmImf/ImfBoxAttribute.h"
+    "ilmimf/IlmImf/ImfChannelList.cpp"
+    "ilmimf/IlmImf/ImfChannelList.h"
+    "ilmimf/IlmImf/ImfChannelListAttribute.cpp"
+    "ilmimf/IlmImf/ImfChannelListAttribute.h"
+    "ilmimf/IlmImf/ImfCheckedArithmetic.h"
+    "ilmimf/IlmImf/ImfChromaticities.cpp"
+    "ilmimf/IlmImf/ImfChromaticities.h"
+    "ilmimf/IlmImf/ImfChromaticitiesAttribute.cpp"
+    "ilmimf/IlmImf/ImfChromaticitiesAttribute.h"
+    "ilmimf/IlmImf/ImfCompositeDeepScanLine.cpp"
+    "ilmimf/IlmImf/ImfCompositeDeepScanLine.h"
+    "ilmimf/IlmImf/ImfCompression.h"
+    "ilmimf/IlmImf/ImfCompressionAttribute.cpp"
+    "ilmimf/IlmImf/ImfCompressionAttribute.h"
+    "ilmimf/IlmImf/ImfCompressor.cpp"
+    "ilmimf/IlmImf/ImfCompressor.h"
+    "ilmimf/IlmImf/ImfConvert.cpp"
+    "ilmimf/IlmImf/ImfConvert.h"
+    "ilmimf/IlmImf/ImfCRgbaFile.cpp"
+    "ilmimf/IlmImf/ImfCRgbaFile.h"
+    "ilmimf/IlmImf/ImfDeepCompositing.cpp"
+    "ilmimf/IlmImf/ImfDeepCompositing.h"
+    "ilmimf/IlmImf/ImfDeepFrameBuffer.cpp"
+    "ilmimf/IlmImf/ImfDeepFrameBuffer.h"
+    "ilmimf/IlmImf/ImfDeepImageState.h"
+    "ilmimf/IlmImf/ImfDeepImageStateAttribute.cpp"
+    "ilmimf/IlmImf/ImfDeepImageStateAttribute.h"
+    "ilmimf/IlmImf/ImfDeepScanLineInputFile.cpp"
+    "ilmimf/IlmImf/ImfDeepScanLineInputFile.h"
+    "ilmimf/IlmImf/ImfDeepScanLineInputPart.cpp"
+    "ilmimf/IlmImf/ImfDeepScanLineInputPart.h"
+    "ilmimf/IlmImf/ImfDeepScanLineOutputFile.cpp"
+    "ilmimf/IlmImf/ImfDeepScanLineOutputFile.h"
+    "ilmimf/IlmImf/ImfDeepScanLineOutputPart.cpp"
+    "ilmimf/IlmImf/ImfDeepScanLineOutputPart.h"
+    "ilmimf/IlmImf/ImfDeepTiledInputFile.cpp"
+    "ilmimf/IlmImf/ImfDeepTiledInputFile.h"
+    "ilmimf/IlmImf/ImfDeepTiledInputPart.cpp"
+    "ilmimf/IlmImf/ImfDeepTiledInputPart.h"
+    "ilmimf/IlmImf/ImfDeepTiledOutputFile.cpp"
+    "ilmimf/IlmImf/ImfDeepTiledOutputFile.h"
+    "ilmimf/IlmImf/ImfDeepTiledOutputPart.cpp"
+    "ilmimf/IlmImf/ImfDeepTiledOutputPart.h"
+    "ilmimf/IlmImf/ImfDoubleAttribute.cpp"
+    "ilmimf/IlmImf/ImfDoubleAttribute.h"
+    "ilmimf/IlmImf/ImfEnvmap.cpp"
+    "ilmimf/IlmImf/ImfEnvmap.h"
+    "ilmimf/IlmImf/ImfEnvmapAttribute.cpp"
+    "ilmimf/IlmImf/ImfEnvmapAttribute.h"
+    "ilmimf/IlmImf/ImfExport.h"
+    "ilmimf/IlmImf/ImfFloatAttribute.cpp"
+    "ilmimf/IlmImf/ImfFloatAttribute.h"
+    "ilmimf/IlmImf/ImfForward.h"
+    "ilmimf/IlmImf/ImfFrameBuffer.cpp"
+    "ilmimf/IlmImf/ImfFrameBuffer.h"
+    "ilmimf/IlmImf/ImfFramesPerSecond.cpp"
+    "ilmimf/IlmImf/ImfFramesPerSecond.h"
+    "ilmimf/IlmImf/ImfGenericInputFile.cpp"
+    "ilmimf/IlmImf/ImfGenericInputFile.h"
+    "ilmimf/IlmImf/ImfGenericOutputFile.cpp"
+    "ilmimf/IlmImf/ImfGenericOutputFile.h"
+    "ilmimf/IlmImf/ImfHeader.cpp"
+    "ilmimf/IlmImf/ImfHeader.h"
+    "ilmimf/IlmImf/ImfHuf.cpp"
+    "ilmimf/IlmImf/ImfHuf.h"
+    "ilmimf/IlmImf/ImfInputFile.cpp"
+    "ilmimf/IlmImf/ImfInputFile.h"
+    "ilmimf/IlmImf/ImfInputPart.cpp"
+    "ilmimf/IlmImf/ImfInputPart.h"
+    "ilmimf/IlmImf/ImfInputPartData.cpp"
+    "ilmimf/IlmImf/ImfInputPartData.h"
+    "ilmimf/IlmImf/ImfInputStreamMutex.h"
+    "ilmimf/IlmImf/ImfInt64.h"
+    "ilmimf/IlmImf/ImfIntAttribute.cpp"
+    "ilmimf/IlmImf/ImfIntAttribute.h"
+    "ilmimf/IlmImf/ImfIO.cpp"
+    "ilmimf/IlmImf/ImfIO.h"
+    "ilmimf/IlmImf/ImfKeyCode.cpp"
+    "ilmimf/IlmImf/ImfKeyCode.h"
+    "ilmimf/IlmImf/ImfKeyCodeAttribute.cpp"
+    "ilmimf/IlmImf/ImfKeyCodeAttribute.h"
+    "ilmimf/IlmImf/ImfLineOrder.h"
+    "ilmimf/IlmImf/ImfLineOrderAttribute.cpp"
+    "ilmimf/IlmImf/ImfLineOrderAttribute.h"
+    "ilmimf/IlmImf/ImfLut.cpp"
+    "ilmimf/IlmImf/ImfLut.h"
+    "ilmimf/IlmImf/ImfMatrixAttribute.cpp"
+    "ilmimf/IlmImf/ImfMatrixAttribute.h"
+    "ilmimf/IlmImf/ImfMisc.cpp"
+    "ilmimf/IlmImf/ImfMisc.h"
+    "ilmimf/IlmImf/ImfMultiPartInputFile.cpp"
+    "ilmimf/IlmImf/ImfMultiPartInputFile.h"
+    "ilmimf/IlmImf/ImfMultiPartOutputFile.cpp"
+    "ilmimf/IlmImf/ImfMultiPartOutputFile.h"
+    "ilmimf/IlmImf/ImfMultiView.cpp"
+    "ilmimf/IlmImf/ImfMultiView.h"
+    "ilmimf/IlmImf/ImfName.h"
+    "ilmimf/IlmImf/ImfNamespace.h"
+    "ilmimf/IlmImf/ImfOpaqueAttribute.cpp"
+    "ilmimf/IlmImf/ImfOpaqueAttribute.h"
+    "ilmimf/IlmImf/ImfOptimizedPixelReading.h"
+    "ilmimf/IlmImf/ImfOutputFile.cpp"
+    "ilmimf/IlmImf/ImfOutputFile.h"
+    "ilmimf/IlmImf/ImfOutputPart.cpp"
+    "ilmimf/IlmImf/ImfOutputPart.h"
+    "ilmimf/IlmImf/ImfOutputPartData.cpp"
+    "ilmimf/IlmImf/ImfOutputPartData.h"
+    "ilmimf/IlmImf/ImfOutputStreamMutex.h"
+    "ilmimf/IlmImf/ImfPartHelper.h"
+    "ilmimf/IlmImf/ImfPartType.cpp"
+    "ilmimf/IlmImf/ImfPartType.h"
+    "ilmimf/IlmImf/ImfPixelType.h"
+    "ilmimf/IlmImf/ImfPizCompressor.cpp"
+    "ilmimf/IlmImf/ImfPizCompressor.h"
+    "ilmimf/IlmImf/ImfPreviewImage.cpp"
+    "ilmimf/IlmImf/ImfPreviewImage.h"
+    "ilmimf/IlmImf/ImfPreviewImageAttribute.cpp"
+    "ilmimf/IlmImf/ImfPreviewImageAttribute.h"
+    "ilmimf/IlmImf/ImfPxr24Compressor.cpp"
+    "ilmimf/IlmImf/ImfPxr24Compressor.h"
+    "ilmimf/IlmImf/ImfRational.cpp"
+    "ilmimf/IlmImf/ImfRational.h"
+    "ilmimf/IlmImf/ImfRationalAttribute.cpp"
+    "ilmimf/IlmImf/ImfRationalAttribute.h"
+    "ilmimf/IlmImf/ImfRgba.h"
+    "ilmimf/IlmImf/ImfRgbaFile.cpp"
+    "ilmimf/IlmImf/ImfRgbaFile.h"
+    "ilmimf/IlmImf/ImfRgbaYca.cpp"
+    "ilmimf/IlmImf/ImfRgbaYca.h"
+    "ilmimf/IlmImf/ImfRleCompressor.cpp"
+    "ilmimf/IlmImf/ImfRleCompressor.h"
+    "ilmimf/IlmImf/ImfScanLineInputFile.cpp"
+    "ilmimf/IlmImf/ImfScanLineInputFile.h"
+    "ilmimf/IlmImf/ImfStandardAttributes.cpp"
+    "ilmimf/IlmImf/ImfStandardAttributes.h"
+    "ilmimf/IlmImf/ImfStdIO.cpp"
+    "ilmimf/IlmImf/ImfStdIO.h"
+    "ilmimf/IlmImf/ImfStringAttribute.cpp"
+    "ilmimf/IlmImf/ImfStringAttribute.h"
+    "ilmimf/IlmImf/ImfStringVectorAttribute.cpp"
+    "ilmimf/IlmImf/ImfStringVectorAttribute.h"
+    "ilmimf/IlmImf/ImfSystemSpecific.h"
+    "ilmimf/IlmImf/ImfTestFile.cpp"
+    "ilmimf/IlmImf/ImfTestFile.h"
+    "ilmimf/IlmImf/ImfThreading.cpp"
+    "ilmimf/IlmImf/ImfThreading.h"
+    "ilmimf/IlmImf/ImfTileDescription.h"
+    "ilmimf/IlmImf/ImfTileDescriptionAttribute.cpp"
+    "ilmimf/IlmImf/ImfTileDescriptionAttribute.h"
+    "ilmimf/IlmImf/ImfTiledInputFile.cpp"
+    "ilmimf/IlmImf/ImfTiledInputFile.h"
+    "ilmimf/IlmImf/ImfTiledInputPart.cpp"
+    "ilmimf/IlmImf/ImfTiledInputPart.h"
+    "ilmimf/IlmImf/ImfTiledMisc.cpp"
+    "ilmimf/IlmImf/ImfTiledMisc.h"
+    "ilmimf/IlmImf/ImfTiledOutputFile.cpp"
+    "ilmimf/IlmImf/ImfTiledOutputFile.h"
+    "ilmimf/IlmImf/ImfTiledOutputPart.cpp"
+    "ilmimf/IlmImf/ImfTiledOutputPart.h"
+    "ilmimf/IlmImf/ImfTiledRgbaFile.cpp"
+    "ilmimf/IlmImf/ImfTiledRgbaFile.h"
+    "ilmimf/IlmImf/ImfTileOffsets.cpp"
+    "ilmimf/IlmImf/ImfTileOffsets.h"
+    "ilmimf/IlmImf/ImfTimeCode.cpp"
+    "ilmimf/IlmImf/ImfTimeCode.h"
+    "ilmimf/IlmImf/ImfTimeCodeAttribute.cpp"
+    "ilmimf/IlmImf/ImfTimeCodeAttribute.h"
+    "ilmimf/IlmImf/ImfVecAttribute.cpp"
+    "ilmimf/IlmImf/ImfVecAttribute.h"
+    "ilmimf/IlmImf/ImfVersion.cpp"
+    "ilmimf/IlmImf/ImfVersion.h"
+    "ilmimf/IlmImf/ImfWav.cpp"
+    "ilmimf/IlmImf/ImfWav.h"
+    "ilmimf/IlmImf/ImfXdr.h"
+    "ilmimf/IlmImf/ImfZipCompressor.cpp"
+    "ilmimf/IlmImf/ImfZipCompressor.h"
+  ]
+
+  direct_dependent_configs = [":ilmimf-config", ":ilmbase-config"]
+  defines = [
+    "ILMIMF_EXPORTS"
+    "OPENEXR_DLL"
+  ]
+
+  deps = [
+    ":ilmhalf"
+    ":ilmiex"
+    ":ilmthread"
+    ":ilmmath"
+    "//third_party/zlib:zlib"
+  ]
+}
+
+test("ilmhalftest") {
+  sources = [
+    "ilmbase/HalfTest/main.cpp"
+    "ilmbase/HalfTest/testArithmetic.cpp"
+    "ilmbase/HalfTest/testBitPatterns.cpp"
+    "ilmbase/HalfTest/testClassification.cpp"
+    "ilmbase/HalfTest/testError.cpp"
+    "ilmbase/HalfTest/testFunction.cpp"
+    "ilmbase/HalfTest/testLimits.cpp"
+    "ilmbase/HalfTest/testSize.cpp"
+  ]
+  include_dirs = ["ilmbase/HalfTest"]
+  deps = [":ilmhalf"]
+}

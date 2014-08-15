@@ -1,0 +1,57 @@
+
+config("libmng-config") {
+  include_dirs = ["src"]
+}
+
+static_library("libmng") {
+  sources = [
+    "src/libmng.h"
+    "src/libmng_callback_xs.c"
+    "src/libmng_chunks.h"
+    "src/libmng_chunk_descr.c"
+    "src/libmng_chunk_descr.h"
+    "src/libmng_chunk_io.c"
+    "src/libmng_chunk_io.h"
+    "src/libmng_chunk_prc.c"
+    "src/libmng_chunk_prc.h"
+    "src/libmng_chunk_xs.c"
+    "src/libmng_cms.c"
+    "src/libmng_cms.h"
+    "src/libmng_conf.h"
+    "src/libmng_data.h"
+    "src/libmng_display.c"
+    "src/libmng_display.h"
+    "src/libmng_dither.c"
+    "src/libmng_dither.h"
+    "src/libmng_error.c"
+    "src/libmng_error.h"
+    "src/libmng_filter.c"
+    "src/libmng_filter.h"
+    "src/libmng_hlapi.c"
+    "src/libmng_jpeg.c"
+    "src/libmng_jpeg.h"
+    "src/libmng_memory.h"
+    "src/libmng_objects.h"
+    "src/libmng_object_prc.c"
+    "src/libmng_object_prc.h"
+    "src/libmng_pixels.c"
+    "src/libmng_pixels.h"
+    "src/libmng_prop_xs.c"
+    "src/libmng_read.c"
+    "src/libmng_read.h"
+    "src/libmng_trace.c"
+    "src/libmng_trace.h"
+    "src/libmng_types.h"
+    "src/libmng_write.c"
+    "src/libmng_write.h"
+    "src/libmng_zlib.c"
+    "src/libmng_zlib.h"
+  ]
+
+  direct_dependent_configs = [":libmng-config"]
+  deps = [
+    "//third_party/libjpeg:libjpeg"
+    "//third_party/zlib:zlib"
+  ]
+  forward_dependent_configs_from = deps
+}

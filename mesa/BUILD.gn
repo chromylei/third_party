@@ -1,0 +1,123 @@
+import("mesa.gni")
+
+config("mesa_config") {
+  include_dirs = ["src/include"]
+}
+
+config("mesa_internal_config") {
+  defines = [
+    "MAPI_ABI_HEADER=\"glapi_mapi_tmp_shared.h\"",
+    "PACKAGE_NAME=\"Mesa\"",
+    "PACKAGE_TARNAME=\"mesa\"",
+    "PACKAGE_VERSION=\"9.0.3\"",
+    "PACKAGE_STRING=\"Mesa\ 9.0.3\"",
+    "PACKAGE_BUGREPORT=\"https://bugs.freedesktop.org/enter_bug.cgi\?product=Mesa\"",
+    "PACKAGE_URL=\"\"",
+    "PACKAGE=\"mesa\"",
+    "VERSION=\"9.0.3\"",
+    "STDC_HEADERS=1",
+    "HAVE_SYS_TYPES_H=1",
+    "HAVE_SYS_STAT_H=1",
+    "HAVE_STDLIB_H=1",
+    "HAVE_STRING_H=1",
+    "HAVE_MEMORY_H=1",
+    "HAVE_STRINGS_H=1",
+    "HAVE_INTTYPES_H=1",
+    "HAVE_STDINT_H=1",
+    "HAVE_DLFCN_H=1",
+    "LT_OBJDIR=\".libs/\"",
+    "YYTEXT_POINTER=1",
+    "HAVE_LIBEXPAT=1",
+    "HAVE_LIBXCB_DRI2=1",
+    "FEATURE_GL=1",
+    "MAPI_MODE_GLAPI",
+    #"USE_X86_64_ASM",
+    "IN_DRI_DRIVER",
+    "USE_XCB",
+    "GLX_INDIRECT_RENDERING",
+    "GLX_DIRECT_RENDERING",
+    "USE_EXTERNAL_DXTN_LIB=1",
+    "IN_DRI_DRIVER",
+    "HAVE_ALIAS",
+    "HAVE_MINCORE",
+    "HAVE_LIBUDEV",
+    "_GLAPI_NO_EXPORTS",
+  ]
+  
+  if (is_win) { include_dirs = ["src/include/c99"] }
+}
+
+static_library("mesa_libglsl_common") {
+  sources = mesa_libglsl_sources
+
+  configs += [":mesa_internal_config"]
+  direct_dependent_configs = [":mesa_config"]
+  if (is_win) {
+    cflags = ["/wd4291", "/wd4005"]
+  }
+
+  include_dirs = [
+    "src/src/gallium/auxiliary",
+    "src/src/gallium/include",
+    "src/src/glsl",
+    "src/src/glsl/glcpp",
+    "src/src/mapi",
+    "src/src/mapi/glapi",
+    "src/src/mesa",
+    "src/src/mesa/main",
+    "src/include",
+    "src/chromium_gensrc/mesa/",
+    "src/chromium_gensrc/mesa/main",
+    "src/chromium_gensrc/mesa/program",
+    "src/chromium_gensrc/mesa/glapi",
+  ]
+}
+
+static_library("mesa") {
+  sources = mesa_sources
+
+  include_dirs = [
+    "src/src/gallium/auxiliary",
+    "src/src/gallium/include",
+    "src/src/glsl",
+    "src/src/glsl/glcpp",
+    "src/src/mapi",
+    "src/src/mapi/glapi",
+    "src/src/mesa",
+    "src/src/mesa/main",
+    "src/chromium_gensrc/mesa/",
+    "src/chromium_gensrc/mesa/main",
+    "src/chromium_gensrc/mesa/program",
+    "src/chromium_gensrc/mesa/glapi",
+    "src/include"
+  ]
+
+  deps = [":mesa_libglsl_common"]
+  configs += [":mesa_internal_config"]
+}
+
+shared_library("osmesa") {
+  sources = [
+    "src/src/mesa/drivers/common/driverfuncs.c",
+    "src/src/mesa/drivers/common/driverfuncs.h",
+    "src/src/mesa/drivers/common/meta.c",
+    "src/src/mesa/drivers/common/meta.h",
+    "src/src/mesa/drivers/osmesa/osmesa.c",
+    "src/src/mesa/drivers/osmesa/osmesa.def",
+  ]
+  include_dirs = [
+    "src/src/mapi",
+    "src/src/mesa",
+    "src/src/mesa/drivers",
+    "src/chromium_gensrc/mesa",
+    "src/include"
+  ]
+  direct_dependent_configs = [":mesa_config"]
+  configs += [":mesa_internal_config"]
+  deps = [":mesa"]
+  if (is_win) {
+    defines = [
+     "BUILD_GL32", "KEYWORD1=GLAPI", "KEYWORD2=GLAPIENTRY"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+
+
+config("jsoncpp_config") {
+  include_dirs = [
+    "overrides-chromium/include/",
+    "src/include/",
+  ]
+}
+
+static_library("jsoncpp") {
+  sources = [
+    "src/include/json/assertions.h",
+    "src/include/json/autolink.h",
+    "src/include/json/config.h",
+    "src/include/json/features.h",
+    "src/include/json/forwards.h",
+    "src/include/json/json.h",
+    "src/include/json/reader.h",
+    "src/include/json/writer.h",
+    "src/src/lib_json/json_batchallocator.h",
+    "src/src/lib_json/json_reader.cpp",
+    "src/src/lib_json/json_tool.h",
+    "src/src/lib_json/json_writer.cpp",
+    "overrides-chromium/include/json/value.h",
+    "overrides-chromium/src/lib_json/json_value.cpp",
+  ]
+
+  include_dirs = [
+    "src/src/lib_json/"
+  ]
+
+  direct_dependent_configs = [":jsoncpp_config"]
+  defines = ["JSON_USE_EXCEPTION=0"]
+}

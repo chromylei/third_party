@@ -1,0 +1,79 @@
+
+config("libwebp_config") {
+  include_dirs = ["src/src"]
+}
+
+static_library("libwebp") {
+  sources = [
+    "src/src/dec/alpha.c",
+    "src/src/dec/buffer.c",
+    "src/src/dec/frame.c",
+    "src/src/dec/idec.c",
+    "src/src/dec/io.c",
+    "src/src/dec/layer.c",
+    "src/src/dec/quant.c",
+    "src/src/dec/tree.c",
+    "src/src/dec/vp8.c",
+    "src/src/dec/vp8l.c",
+    "src/src/dec/webp.c",
+
+    "src/src/demux/demux.c",
+
+    "src/src/dsp/cpu.c",
+    "src/src/dsp/dec.c",
+    "src/src/dsp/dec_neon.c",
+    "src/src/dsp/dec_sse2.c",
+    "src/src/dsp/lossless.c",
+    "src/src/dsp/upsampling.c",
+    "src/src/dsp/upsampling_neon.c",
+    "src/src/dsp/upsampling_sse2.c",
+    "src/src/dsp/yuv.c",
+
+    "src/src/dsp/enc.c",
+    "src/src/dsp/enc_neon.c",
+    "src/src/dsp/enc_sse2.c",
+
+    "src/src/enc/alpha.c",
+    "src/src/enc/analysis.c",
+    "src/src/enc/backward_references.c",
+    "src/src/enc/config.c",
+    "src/src/enc/cost.c",
+    "src/src/enc/filter.c",
+    "src/src/enc/frame.c",
+    "src/src/enc/histogram.c",
+    "src/src/enc/iterator.c",
+    "src/src/enc/layer.c",
+    "src/src/enc/picture.c",
+    "src/src/enc/quant.c",
+    "src/src/enc/syntax.c",
+    "src/src/enc/token.c",
+    "src/src/enc/tree.c",
+    "src/src/enc/vp8l.c",
+    "src/src/enc/webpenc.c",
+
+    "src/src/mux/muxedit.c",
+    "src/src/mux/muxinternal.c",
+    "src/src/mux/muxread.c",
+
+    "src/src/utils/alpha_processing.c",
+    "src/src/utils/bit_reader.c",
+    "src/src/utils/color_cache.c",
+    "src/src/utils/filters.c",
+    "src/src/utils/huffman.c",
+    "src/src/utils/quant_levels_dec.c",
+    "src/src/utils/rescaler.c",
+    "src/src/utils/random.c",
+    "src/src/utils/thread.c",
+    "src/src/utils/utils.c",
+
+    "src/src/utils/bit_writer.c",
+    "src/src/utils/huffman_encode.c",
+    "src/src/utils/quant_levels.c",
+  ]
+
+  defines = [
+    "HAVE_WINCODEC_H",
+    "WEBP_USE_THREAD",
+  ]
+  direct_dependent_configs = [":libwebp_config"]
+}

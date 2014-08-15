@@ -1,0 +1,229 @@
+import("//build/templates/precompile.gni")
+import("build/core.gni")
+import("build/external.gni")
+import("build/wxbase.gni")
+import("build/others.gni")
+
+config("wxwidget_config") {
+  include_dirs = [
+    "src/include",
+    "config/mswud",
+  ]
+
+  defines = [
+    "WXUSINGDLL",
+    "_USRDLL",
+    "__WXMSW__",
+  ]
+}
+
+group("wxwidget") {
+  deps = [":wxadv", ":wxaui", ":wxbase", ":wxcore"
+  ":wxhtml", ":wxmedia", ":wxpropgrid", ":wxribbon"
+  ":wxrichtext", ":wxstc", ":wxxml", ":wxxrc"
+  ]
+  direct_dependent_configs = [":wxwidget_config"]
+}
+
+config("wxbuild_config") {
+  defines = [
+    "_CRT_SECURE_NO_DEPRECATE=1",
+    "_CRT_NON_CONFORMING_SWPRINTFS=1",
+    "_SCL_SECURE_NO_WARNINGS=1",
+    "__WXMSW__",
+    "DLL_EXPORTS",
+    "WXBUILDING",
+  ]
+  include_dirs = ["src/include", "config/mswud"]
+}
+
+shared_library("wxadv") {
+  sources = wxwidget_adv_sources
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  defines = ["WXUSE_BASE=0", "WXMAKINGDLL_ADV", "_USRDLL", "WXUSINGDLL"]
+  deps = [":wxbase", ":wxcore"]
+}
+
+shared_library("wxaui") {
+  sources = wxwidget_aui_sources
+  defines = ["WXUSE_BASE=0", "WXMAKINGDLL_AUI", "_USRDLL", "WXUSINGDLL"]
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  deps = [":wxbase", ":wxcore"]
+}
+
+config("wxbase_config") {
+  defines = [
+    "_CRT_SECURE_NO_DEPRECATE=1",
+    "_CRT_NON_CONFORMING_SWPRINTFS=1",
+    "_SCL_SECURE_NO_WARNINGS=1",
+    "__WXMSW__",
+    "DLL_EXPORTS",
+    "WXBUILDING",
+    "wxUSE_GUI=0",
+    "wxUSE_BASE=1",
+    "WXMAKINGDLL_BASE",
+    "_USRDLL",
+  ]
+  include_dirs = ["src/include", "config/mswud"]
+}
+precompile("wxbase_precompile") {
+  prehead = "wx/wxprec.h"
+  precpp = "src/src/common/dummy.cpp"
+  direct_dependent_configs = [":wxbase_config"]
+}
+
+shared_library("wxbase") {
+  hard_dep = true
+  sources = wx_base_sources
+  deps = [":wxregex", ":wxexpat", ":wxtiff", ":wxjpeg", ":wxpng",
+          ":wxzlib", ":wxbase_precompile"]
+  configs -= ["//build/config/win:win32_lean"]
+}
+
+config("wxcore_config") {
+  defines = ["wxUSE_BASE=0", "WXMAKINGDLL_CORE", "_USRDLL", "WXUSINGDLL"]
+}
+precompile("wxcore_precompile") {
+  prehead = "wx/wxprec.h"
+  precpp = "src/src/common/dummy.cpp"
+  direct_dependent_configs = [":wxbuild_config", ":wxcore_config"]
+}
+shared_library("wxcore") {
+  hard_dep = true
+  sources = wxwidget_core_sources
+  configs -= ["//build/config/win:win32_lean"]
+  deps = [":wxbase", ":wxcore_precompile", ":wxjpeg", ":wxpng", ":wxtiff"]
+  libs = ["odbc32.lib", "odbccp32.lib", "comctl32.lib", "rpcrt4.lib"]
+}
+
+shared_library("wxhtml") {
+  hard_dep = true
+  sources = wxwidget_html_sources
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  defines = ["WXUSE_BASE=0", "WXMAKINGDLL_HTML", "_USRDLL", "WXUSINGDLL"]
+  deps = [":wxbase", ":wxcore"]
+}
+
+shared_library("wxmedia") {
+  sources = wxwidget_media_sources
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  defines = ["WXUSE_BASE=0", "WXMAKINGDLL_MEDIA", "_USRDLL", "WXUSINGDLL"]
+  deps = [":wxbase", ":wxcore"]
+}
+
+config("wxpropgrid_config") {
+  defines = ["WXMAKINGDLL_PROPGRID", "_USRDLL", "WXUSINGDLL"]
+}
+precompile("wxpropgrid_precompile") {
+  prehead = "wx/wxprec.h"
+  precpp = "src/src/common/dummy.cpp"
+  direct_dependent_configs = [":wxbuild_config", ":wxpropgrid_config"]
+}
+shared_library("wxpropgrid") {
+  hard_dep = true
+  sources = wxwidget_propgrid_sources
+  configs -= ["//build/config/win:win32_lean"]
+  deps = [":wxbase", ":wxcore", ":wxadv", ":wxpropgrid_precompile"]
+}
+
+shared_library("wxribbon") {
+  sources = wxwidget_ribbon_sources
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  defines = ["WXMAKINGDLL_RIBBON", "_USRDLL", "WXUSINGDLL"]
+  deps = [":wxbase", ":wxcore", ":wxadv"]
+}
+
+shared_library("wxrichtext") {
+  sources = wxwidget_richtext_sources
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  defines = ["WXMAKINGDLL_RICHTEXT", "_USRDLL", "WXUSINGDLL"]
+  deps = [":wxbase", ":wxcore", ":wxadv", ":wxxml", ":wxhtml"]
+}
+
+shared_library("wxstc") {
+  sources = wxwidget_stc_sources
+  sources += wxwidget_scintilla_sources
+  defines = [
+    "WXMAKINGDLL_STC", "_USRDLL", "WXUSINGDLL"
+    "__WX__", "SCI_LEXER", "LINK_LEXERS"
+  ]
+  include_dirs = [
+    "src/src/stc/scintilla/include",
+    "src/src/stc/scintilla/src"
+    "src/src/stc/scintilla/lexlib"
+  ]
+  configs += [":wxbuild_config"]
+  deps = [":wxbase", ":wxcore", ":wxadv"]
+}
+
+shared_library("wxwebview") {
+  sources = wxwidget_webview_sources
+  defines = ["WXMAKINGDLL_WEBVIEW", "_USRDLL", "WXUSINGDLL"]
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  deps = [":wxbase", ":wxcore", ":wxadv"]
+}
+
+shared_library("wxxml") {
+  sources = wxwidget_xml_sources
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  defines = ["WXMAKINGDLL_XML", "_USRDLL", "WXUSINGDLL"]
+  deps = [":wxbase", ":wxcore", ":wxadv", ":wxexpat"]
+}
+
+shared_library("wxxrc") {
+  sources = wxwidget_xrc_sources
+  configs += [":wxbuild_config"]
+  configs -= ["//build/config/win:win32_lean"]
+  defines = ["WXMAKINGDLL_XRC", "_USRDLL", "WXUSINGDLL"]
+  deps = [":wxbase", ":wxcore", ":wxadv", ":wxxml", ":wxhtml"]
+}
+
+# thirdparty librarys
+config("wxzlib_config") {include_dirs = ["src/src/zlib"]}
+static_library("wxzlib") {
+  sources = wx_zlib_sources
+  direct_dependent_configs = [":wxzlib_config"]
+}
+
+config("wxregex_config") {include_dirs = ["src/src/regex"]}
+static_library("wxregex") {
+  sources = wx_regex_sources
+  direct_dependent_configs = [":wxregex_config", ":wxbuild_config"]
+}
+
+config("wxexpat_config") {  include_dirs = ["src/src/expat/lib"] }
+static_library("wxexpat") {
+  sources = wx_expat_sources
+  direct_dependent_configs = [":wxexpat_config"]
+  defines = ["COMPILED_FROM_DSP"]
+}
+
+config("wxpng_config") {  include_dirs = ["src/src/png/"] }
+static_library("wxpng") {
+  sources = wx_png_sources
+  direct_dependent_configs = [":wxpng_config"]
+  deps = [":wxzlib"]
+}
+
+config("wxjpeg_config") {  include_dirs = ["src/src/jpeg/"] }
+static_library("wxjpeg") {
+  sources = wx_jpeg_sources
+  direct_dependent_configs = [":wxjpeg_config"]
+}
+
+config("wxtiff_config") {  include_dirs = ["src/src/tiff/libtiff"] }
+static_library("wxtiff") {
+  sources = wx_tiff_sources
+  direct_dependent_configs = [":wxtiff_config"]
+  include_dirs = ["config/mswud/wxtiff"]
+  deps = [":wxjpeg", ":wxzlib"]
+}
+

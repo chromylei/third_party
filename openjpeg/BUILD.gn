@@ -1,0 +1,72 @@
+config("openjpeg-config") {
+  include_dirs = ["src/libopenjpeg"]
+}
+
+component("openjpeg") {
+  sources = [
+    "src/libopenjpeg/bio.c"
+    "src/libopenjpeg/bio.h"
+    "src/libopenjpeg/cidx_manager.c"
+    "src/libopenjpeg/cidx_manager.h"
+    "src/libopenjpeg/cio.c"
+    "src/libopenjpeg/cio.h"
+    "src/libopenjpeg/dwt.c"
+    "src/libopenjpeg/dwt.h"
+    "src/libopenjpeg/event.c"
+    "src/libopenjpeg/event.h"
+    "src/libopenjpeg/fix.h"
+    "src/libopenjpeg/image.c"
+    "src/libopenjpeg/image.h"
+    "src/libopenjpeg/indexbox_manager.h"
+    "src/libopenjpeg/int.h"
+    "src/libopenjpeg/j2k.c"
+    "src/libopenjpeg/j2k.h"
+    "src/libopenjpeg/j2k_lib.c"
+    "src/libopenjpeg/j2k_lib.h"
+    "src/libopenjpeg/jp2.c"
+    "src/libopenjpeg/jp2.h"
+    "src/libopenjpeg/jpt.c"
+    "src/libopenjpeg/jpt.h"
+    "src/libopenjpeg/jpwl"
+    "src/libopenjpeg/jpwl/crc.c"
+    "src/libopenjpeg/jpwl/crc.h"
+    "src/libopenjpeg/jpwl/jpwl.c"
+    "src/libopenjpeg/jpwl/jpwl.h"
+    "src/libopenjpeg/jpwl/jpwl_lib.c"
+    "src/libopenjpeg/jpwl/rs.c"
+    "src/libopenjpeg/jpwl/rs.h"
+    "src/libopenjpeg/mct.c"
+    "src/libopenjpeg/mct.h"
+    "src/libopenjpeg/mqc.c"
+    "src/libopenjpeg/mqc.h"
+    "src/libopenjpeg/openjpeg.c"
+    "src/libopenjpeg/openjpeg.h"
+    "src/libopenjpeg/opj_includes.h"
+    "src/libopenjpeg/opj_malloc.h"
+    "src/libopenjpeg/phix_manager.c"
+    "src/libopenjpeg/pi.c"
+    "src/libopenjpeg/pi.h"
+    "src/libopenjpeg/ppix_manager.c"
+    "src/libopenjpeg/raw.c"
+    "src/libopenjpeg/raw.h"
+    "src/libopenjpeg/t1.c"
+    "src/libopenjpeg/t1.h"
+    "src/libopenjpeg/t1_generate_luts.c"
+    "src/libopenjpeg/t1_luts.h"
+    "src/libopenjpeg/t2.c"
+    "src/libopenjpeg/t2.h"
+    "src/libopenjpeg/tcd.c"
+    "src/libopenjpeg/tcd.h"
+    "src/libopenjpeg/tgt.c"
+    "src/libopenjpeg/tgt.h"
+    "src/libopenjpeg/thix_manager.c"
+    "src/libopenjpeg/tpix_manager.c"
+  ]
+
+  defines = [
+    "OPJ_EXPORTS=1"
+    "PACKAGE_VERSION=\"1.5.1\""
+  ]
+  direct_dependent_configs = [":openjpeg-config"]
+  include_dirs = ["config/win32"]
+}
