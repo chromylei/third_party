@@ -1,0 +1,15 @@
+
+config("iconv_config") {
+  if (is_win) {
+    include_dirs = ["config"]
+  }
+}
+
+static_library("iconv") {
+  sources = [
+    "src/lib/iconv.c"
+    "src/libcharset/lib/localcharset.c"
+  ]
+  defines = ["LIBDIR"]
+  direct_dependent_configs = [":iconv_config"]
+}

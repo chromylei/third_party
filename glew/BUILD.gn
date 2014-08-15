@@ -1,0 +1,39 @@
+
+config("glew-config") {
+  include_dirs = [
+    "//third_party/glew/src/include",
+  ]
+  if (is_win) {libs = ["opengl32.lib"]}
+}
+
+component("glew") {
+  sources = [
+    "src/src/glew.c",
+    "src/src/glew.h",
+    "src/build/glew.rc",
+    "src/src/wglew.h",
+  ]
+
+  direct_dependent_configs = [":glew-config"]
+  if (component_mode == "static_library") {
+    defines = ["GLEW_STATIC"]
+  } else {
+    defines = ["GLEW_BUILD", "VC_EXTRALEAN"]
+  }
+}
+
+executable("glewinfo") {
+  sources  = [
+    "src/src/glewinfo.c",
+    "src/build/glewinfo.rc",
+  ]
+  deps = [":glew"]
+}
+
+executable("visualinfo") {
+  sources  = [
+    "src/src/visualinfo.c",
+    "src/build/visualinfo.rc",
+  ]
+  deps = [":glew"]
+}

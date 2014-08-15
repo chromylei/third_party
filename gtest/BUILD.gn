@@ -1,0 +1,12 @@
+config("gtest_config") {
+  include_dirs = ["src/include"]
+}
+
+static_library("gtest") {
+  sources = [
+    "src/src/gtest-all.cc"
+  ]
+
+  include_dirs = ["src"]
+  direct_dependent_configs = [":gtest_config"]
+}

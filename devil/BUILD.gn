@@ -1,0 +1,173 @@
+
+config("devil-config") {
+  include_dirs = ["src/include"]
+}
+
+component("devil") {
+  sources = [
+    "src/src-IL/src/altivec_common.c"
+    "src/src-IL/src/altivec_typeconversion.c"
+    "src/src-IL/src/il_alloc.c"
+    "src/src-IL/src/il_bits.c"
+    "src/src-IL/src/il_blp.c"
+    "src/src-IL/src/il_bmp.c"
+    "src/src-IL/src/il_convbuff.c"
+    "src/src-IL/src/il_convert.c"
+    "src/src-IL/src/il_cut.c"
+    "src/src-IL/src/il_dcx.c"
+    "src/src-IL/src/il_dds-save.c"
+    "src/src-IL/src/il_dds.c"
+    "src/src-IL/src/il_devil.c"
+    "src/src-IL/src/il_dicom.c"
+    "src/src-IL/src/il_doom.c"
+    "src/src-IL/src/il_dpx.c"
+    "src/src-IL/src/il_endian.c"
+    "src/src-IL/src/il_error.c"
+    "src/src-IL/src/il_exr.cpp"
+    "src/src-IL/src/il_fastconv.c"
+    "src/src-IL/src/il_files.c"
+    "src/src-IL/src/il_fits.c"
+    "src/src-IL/src/il_ftx.c"
+    "src/src-IL/src/il_gif.c"
+    "src/src-IL/src/il_hdr.c"
+    "src/src-IL/src/il_header.c"
+    "src/src-IL/src/il_icns.c"
+    "src/src-IL/src/il_icon.c"
+    "src/src-IL/src/il_iff.c"
+    "src/src-IL/src/il_ilbm.c"
+    "src/src-IL/src/il_internal.c"
+    "src/src-IL/src/il_io.c"
+    "src/src-IL/src/il_iwi.c"
+    "src/src-IL/src/il_jp2.c"
+    "src/src-IL/src/il_jpeg.c"
+    "src/src-IL/src/il_lif.c"
+    "src/src-IL/src/il_main.c"
+    "src/src-IL/src/il_manip.c"
+    "src/src-IL/src/il_mdl.c"
+    "src/src-IL/src/il_mng.c"
+    "src/src-IL/src/il_mp3.c"
+    "src/src-IL/src/il_neuquant.c"
+    "src/src-IL/src/il_nvidia.cpp"
+    "src/src-IL/src/il_pal.c"
+    "src/src-IL/src/il_pcd.c"
+    "src/src-IL/src/il_pcx.c"
+    "src/src-IL/src/il_pic.c"
+    "src/src-IL/src/il_pix.c"
+    "src/src-IL/src/il_png.c"
+    "src/src-IL/src/il_pnm.c"
+    "src/src-IL/src/il_profiles.c"
+    "src/src-IL/src/il_psd.c"
+    "src/src-IL/src/il_psp.c"
+    "src/src-IL/src/il_pxr.c"
+    "src/src-IL/src/il_quantizer.c"
+    "src/src-IL/src/il_raw.c"
+    "src/src-IL/src/il_rawdata.c"
+    "src/src-IL/src/il_register.c"
+    "src/src-IL/src/il_rle.c"
+    "src/src-IL/src/il_rot.c"
+    "src/src-IL/src/il_sgi.c"
+    "src/src-IL/src/il_size.c"
+    "src/src-IL/src/il_squish.cpp"
+    "src/src-IL/src/il_stack.c"
+    "src/src-IL/src/il_states.c"
+    "src/src-IL/src/il_sun.c"
+    "src/src-IL/src/il_targa.c"
+    "src/src-IL/src/il_texture.c"
+    "src/src-IL/src/il_tiff.c"
+    "src/src-IL/src/il_tpl.c"
+    "src/src-IL/src/il_utility.c"
+    "src/src-IL/src/il_utx.cpp"
+    "src/src-IL/src/il_vtf.c"
+    "src/src-IL/src/il_wal.c"
+    "src/src-IL/src/il_wbmp.c"
+    "src/src-IL/src/il_wdp.c"
+    "src/src-IL/src/il_xpm.c"
+  ]
+
+  include_dirs = [
+    "src/src-IL/include"
+    "config/"
+  ]
+
+  deps = [
+    "//third_party/lcms:lcms2"
+    "//third_party/libpng:libpng",
+    "//third_party/libtiff:libtiff",
+    "//third_party/libmng:libmng",
+    "//third_party/libjpeg:libjpeg"
+    "//third_party/openexr:ilmimf"
+    "//third_party/openexr:ilmhalf"
+    "//third_party/libpng:libpng"
+    "//third_party/jasper:libjasper"
+    "//third_party/zlib:zlib"
+  ]
+
+  defines = [
+    "HAVE_STDLIB_H=1"
+    "HAVE_STRINGS_H=1"
+    "HAVE_STRING_H=1"
+    "HAVE_WINDOWS_H=1"
+    "ILUT_USE_DIRECTX9=1"
+    "PACKAGE=\"DevIL\""
+    "PACKAGE_BUGREPORT=\"bubla@users.sourceforge.net\""
+    "PACKAGE_NAME=\"DevIL\""
+    "PACKAGE_STRING=\"DevIL 1.7.8\""
+    "PACKAGE_TARNAME=\"devil\""
+    "PACKAGE_VERSION=\"1.7.8\""
+    "SSE1"
+    "SSE2"
+    "SSE3"
+    "STDC_HEADERS=1"
+    "VERSION=\"1.7.8\""
+    "IL_NO_WDP"
+  ]
+
+  direct_dependent_configs = [":devil-config"]
+  configs -= ["//build/config/win:win32_lean"]
+}
+
+component("devilu") {
+  sources = [
+    "src/src-ILU/src/ilu_alloc.c"
+    "src/src-ILU/src/ilu_error.c"
+    "src/src-ILU/src/ilu_filter.c"
+    "src/src-ILU/src/ilu_filter_rcg.c"
+    "src/src-ILU/src/ilu_internal.c"
+    "src/src-ILU/src/ilu_main.c"
+    "src/src-ILU/src/ilu_mipmap.c"
+    "src/src-ILU/src/ilu_noise.c"
+    "src/src-ILU/src/ilu_region.c"
+    "src/src-ILU/src/ilu_rotate.c"
+    "src/src-ILU/src/ilu_scale.c"
+    "src/src-ILU/src/ilu_scale2d.c"
+    "src/src-ILU/src/ilu_scale3d.c"
+    "src/src-ILU/src/ilu_scaling.c"
+    "src/src-ILU/src/ilu_states.c"
+    "src/src-ILU/src/ilu_utilities.c"
+  ]
+
+  include_dirs = [
+    "src/src-ILU/include"
+    "config/"
+  ]
+  deps = [":devil"]
+  defines = [
+    "HAVE_STDLIB_H=1"
+    "HAVE_STRINGS_H=1"
+    "HAVE_STRING_H=1"
+    "HAVE_WINDOWS_H=1"
+    "PACKAGE=\"DevILU\""
+    "PACKAGE_BUGREPORT=\"bubla@users.sourceforge.net\""
+    "PACKAGE_NAME=\"DevILU\""
+    "PACKAGE_STRING=\"DevILU 1.7.8\""
+    "PACKAGE_TARNAME=\"devilu\""
+    "PACKAGE_VERSION=\"1.7.8\""
+    "SSE1"
+    "SSE2"
+    "SSE3"
+    "STDC_HEADERS=1"
+    "VERSION=\"1.7.8\""
+    "IL_NO_WDP"
+  ]
+  configs -= ["//build/config/win:win32_lean"]
+}

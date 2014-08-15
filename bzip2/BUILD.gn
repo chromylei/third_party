@@ -1,0 +1,18 @@
+config("bzip2_config") {
+  include_dirs = ["src"]
+}
+
+static_library("bzip2") {
+  sources = [
+    "src/blocksort.c",
+    "src/huffman.c",
+    "src/crctable.c",
+    "src/randtable.c",
+    "src/compress.c",
+    "src/decompress.c",
+    "src/bzlib.c",
+  ]
+
+  direct_dependent_configs = [":bzip2_config"]
+  defines = ["_FILE_OFFSET_BITS=64"]
+}

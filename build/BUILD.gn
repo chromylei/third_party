@@ -1,0 +1,20 @@
+
+group("third_party") {
+  deps = [
+    "//third_party/angle:translator",
+    "//third_party/assimp:assimp",
+    "//third_party/freeglut:freeglut",
+    "//third_party/devil:devil",
+    "//third_party/glew:glew",
+    "//third_party/gli:gli",
+    "//third_party/glm:glm",
+    "//third_party/glslang:glslang",
+    # "//third_party/gtest:gtest",
+    "//third_party/mesa:osmesa",
+    "//third_party/skia/gn:skia",
+    "//third_party/soil:soil",
+    "//third_party/zlib:zlib",
+    "//third_party/v8:v8",
+    "//third_party/wxwidget:wxcore",
+  ]
+}

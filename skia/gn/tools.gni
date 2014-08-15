@@ -1,0 +1,12 @@
+
+skia_picture_renderer_sources = [
+  "../tools/LazyDecodeBitmap.cpp",
+  "../tools/PictureRenderer.h",
+  "../tools/PictureRenderer.cpp",
+  "../tools/PictureRenderingFlags.h",
+  "../tools/PictureRenderingFlags.cpp",
+  "../tools/CopyTilesRenderer.h",
+  "../tools/CopyTilesRenderer.cpp",
+  "../src/pipe/utils/SamplePipeControllers.h",
+  "../src/pipe/utils/SamplePipeControllers.cpp",
+]

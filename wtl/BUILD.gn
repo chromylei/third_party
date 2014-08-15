@@ -1,0 +1,9 @@
+
+config("wtl_config") {
+  include_dirs = ["include"]
+}
+
+static_library("wtl") {
+  sources = ["dummy.cc"]
+  direct_dependent_configs = [":wtl_config"]
+}

@@ -1,0 +1,6 @@
+
+
+skia_picture_utils_sources = [
+  "../tools/picture_utils.cpp",
+  "../tools/picture_utils.h",
+]

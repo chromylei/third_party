@@ -1,0 +1,134 @@
+import("common.gni")
+v8_test_sources = [
+  "src/test/cctest/cctest.cc",
+  "src/test/cctest/gay-fixed.cc",
+  "src/test/cctest/gay-precision.cc",
+  "src/test/cctest/gay-shortest.cc",
+  "src/test/cctest/print-extension.cc",
+  "src/test/cctest/profiler-extension.cc",
+  "src/test/cctest/test-accessors.cc",
+  "src/test/cctest/test-alloc.cc",
+  "src/test/cctest/test-api.cc",
+  "src/test/cctest/test-ast.cc",
+  "src/test/cctest/test-bignum.cc",
+  "src/test/cctest/test-bignum-dtoa.cc",
+  "src/test/cctest/test-circular-queue.cc",
+  "src/test/cctest/test-compiler.cc",
+  "src/test/cctest/test-condition-variable.cc",
+  "src/test/cctest/test-constantpool.cc",
+  "src/test/cctest/test-conversions.cc",
+  "src/test/cctest/test-cpu.cc",
+  "src/test/cctest/test-cpu-profiler.cc",
+  "src/test/cctest/test-dataflow.cc",
+  "src/test/cctest/test-date.cc",
+  "src/test/cctest/test-debug.cc",
+  "src/test/cctest/test-declarative-accessors.cc",
+  "src/test/cctest/test-decls.cc",
+  "src/test/cctest/test-deoptimization.cc",
+  "src/test/cctest/test-dictionary.cc",
+  "src/test/cctest/test-diy-fp.cc",
+  "src/test/cctest/test-double.cc",
+  "src/test/cctest/test-dtoa.cc",
+  "src/test/cctest/test-fast-dtoa.cc",
+  "src/test/cctest/test-fixed-dtoa.cc",
+  "src/test/cctest/test-flags.cc",
+  "src/test/cctest/test-func-name-inference.cc",
+  "src/test/cctest/test-global-handles.cc",
+  "src/test/cctest/test-global-object.cc",
+  "src/test/cctest/test-hashing.cc",
+  "src/test/cctest/test-hashmap.cc",
+  "src/test/cctest/test-heap.cc",
+  "src/test/cctest/test-heap-profiler.cc",
+  "src/test/cctest/test-libplatform-task-queue.cc",
+  "src/test/cctest/test-libplatform-worker-thread.cc",
+  "src/test/cctest/test-list.cc",
+  "src/test/cctest/test-liveedit.cc",
+  "src/test/cctest/test-lockers.cc",
+  "src/test/cctest/test-log.cc",
+  "src/test/cctest/test-microtask-delivery.cc",
+  "src/test/cctest/test-mark-compact.cc",
+  "src/test/cctest/test-mementos.cc",
+  "src/test/cctest/test-mutex.cc",
+  "src/test/cctest/test-object-observe.cc",
+  "src/test/cctest/test-parsing.cc",
+  "src/test/cctest/test-platform.cc",
+  "src/test/cctest/test-platform-tls.cc",
+  "src/test/cctest/test-profile-generator.cc",
+  "src/test/cctest/test-random-number-generator.cc",
+  "src/test/cctest/test-regexp.cc",
+  "src/test/cctest/test-reloc-info.cc",
+  "src/test/cctest/test-representation.cc",
+  "src/test/cctest/test-semaphore.cc",
+  "src/test/cctest/test-serialize.cc",
+  "src/test/cctest/test-socket.cc",
+  "src/test/cctest/test-spaces.cc",
+  "src/test/cctest/test-strings.cc",
+  "src/test/cctest/test-symbols.cc",
+  "src/test/cctest/test-strtod.cc",
+  "src/test/cctest/test-thread-termination.cc",
+  "src/test/cctest/test-threads.cc",
+  "src/test/cctest/test-time.cc",
+  "src/test/cctest/test-types.cc",
+  "src/test/cctest/test-unbound-queue.cc",
+  "src/test/cctest/test-unique.cc",
+  "src/test/cctest/test-utils.cc",
+  "src/test/cctest/test-version.cc",
+  "src/test/cctest/test-weakmaps.cc",
+  "src/test/cctest/test-weaksets.cc",
+  "src/test/cctest/test-weaktypedarrays.cc",
+  "src/test/cctest/trace-extension.cc",
+]
+
+if (v8_target_arch == "ia32") {
+  v8_test_sources += [
+    "src/test/cctest/test-assembler-ia32.cc",
+    "src/test/cctest/test-code-stubs.cc",
+    "src/test/cctest/test-code-stubs-ia32.cc",
+    "src/test/cctest/test-cpu-ia32.cc",
+    "src/test/cctest/test-disasm-ia32.cc",
+    "src/test/cctest/test-macro-assembler-ia32.cc",
+    "src/test/cctest/test-log-stack-tracer.cc",
+  ]
+} else if (v8_target_arch == "x64") {
+  v8_test_sources += [
+    "src/test/cctest/test-assembler-x64.cc",
+    "src/test/cctest/test-code-stubs.cc",
+    "src/test/cctest/test-code-stubs-x64.cc",
+    "src/test/cctest/test-cpu-x64.cc",
+    "src/test/cctest/test-macro-assembler-x64.cc",
+    "src/test/cctest/test-log-stack-tracer.cc",
+  ]
+} else if (v8_target_arch == "arm") {
+  v8_test_sources += [
+    "src/test/cctest/test-assembler-arm.cc",
+    "src/test/cctest/test-code-stubs.cc",
+    "src/test/cctest/test-code-stubs-arm.cc",
+    "src/test/cctest/test-disasm-arm.cc",
+    "src/test/cctest/test-macro-assembler-arm.cc",
+  ]
+} else if (v8_target_arch == "a64") {
+  v8_test_sources += [
+    "src/test/cctest/test-utils-a64.cc",
+    "src/test/cctest/test-assembler-a64.cc",
+    "src/test/cctest/test-code-stubs.cc",
+    "src/test/cctest/test-code-stubs-a64.cc",
+    "src/test/cctest/test-disasm-a64.cc",
+    "src/test/cctest/test-fuzz-a64.cc",
+    "src/test/cctest/test-javascript-a64.cc",
+    "src/test/cctest/test-js-a64-variables.cc",
+  ]
+} else if (v8_target_arch == "mipsel") {
+  v8_test_sources += [
+    "src/test/cctest/test-assembler-mips.cc",
+    "src/test/cctest/test-code-stubs.cc",
+    "src/test/cctest/test-code-stubs-mips.cc",
+    "src/test/cctest/test-disasm-mips.cc",
+    "src/test/cctest/test-macro-assembler-mips.cc",
+  ]
+}
+
+if (is_linux) {
+  v8_test_sources += ["src/test/cctest/test-platform-linux.cc"]
+} else if (is_win) {
+  v8_test_sources += ["src/test/cctest/test-platform-win32.cc"]
+}

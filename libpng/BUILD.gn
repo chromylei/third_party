@@ -1,0 +1,34 @@
+
+config("libpng-config") {
+  include_dirs = ["config/win32", "src"]
+}
+
+static_library("libpng") {
+  sources = [
+    "src/png.c",
+    "src/pngset.c",
+    "src/pngget.c",
+    "src/pngread.c",
+    "src/pngpread.c",
+    "src/pngrtran.c",
+    "src/pngrutil.c",
+    "src/pngerror.c",
+    "src/pngmem.c",
+    "src/pngrio.c",
+    "src/pngwio.c",
+    "src/pngtrans.c",
+    "src/pngwrite.c",
+    "src/pngwtran.c",
+    "src/pngwutil.c",
+  ]
+
+  deps = ["//third_party/zlib:zlib"]
+  direct_dependent_configs = [":libpng-config"]
+}
+
+test("pngtest") {
+  sources = [
+    "src/pngtest.c",
+  ]
+  deps = [":libpng", "//third_party/zlib:zlib"]
+}

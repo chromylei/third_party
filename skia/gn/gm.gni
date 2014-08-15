@@ -1,0 +1,5 @@
+
+gm_expectations_sources = [
+  "../gm/gm_expectations.h",
+  "../gm/gm_expectations.cpp",
+]

@@ -1,0 +1,10 @@
+config("gmock_config") {
+  include_dirs = ["src/include"]
+}
+
+static_library("gmock") {
+  sources = ["src/src/gmock-all.cc"]
+  include_dirs = ["src/"]
+  direct_dependent_configs = [":gmock_config"]
+  deps = ["//third_party/gtest:gtest"]
+}

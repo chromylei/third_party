@@ -1,0 +1,5 @@
+
+skia_flags_sources = [
+  "../tools/flags/SkCommandLineFlags.h",
+  "../tools/flags/SkCommandLineFlags.cpp",
+]

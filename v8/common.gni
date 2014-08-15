@@ -1,0 +1,4 @@
+v8_random_seed=314159265
+v8_compress_startup_data="off"
+v8_support_i18n = true
+v8_target_arch = "ia32"

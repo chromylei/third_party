@@ -1,0 +1,67 @@
+config("ois-config") {
+  include_dirs = ["src/includes"]
+  defines = ["OIS_DYNAMIC_LIB"]
+}
+
+component("ois") {
+  sources = [
+    "src/src/OISEffect.cpp"
+    "src/src/OISException.cpp"
+    "src/src/OISForceFeedback.cpp"
+    "src/src/OISInputManager.cpp"
+    "src/src/OISJoyStick.cpp"
+    "src/src/OISKeyboard.cpp"
+    "src/src/OISObject.cpp"
+    "src/src/win32/Win32ForceFeedback.cpp"
+    "src/src/win32/Win32InputManager.cpp"
+    "src/src/win32/Win32JoyStick.cpp"
+    "src/src/win32/Win32KeyBoard.cpp"
+    "src/src/win32/Win32Mouse.cpp"
+    "src/includes/OIS.h"
+    "src/includes/OISConfig.h"
+    "src/includes/OISEvents.h"
+    "src/includes/OISException.h"
+    "src/includes/OISFactoryCreator.h"
+    "src/includes/OISInputManager.h"
+    "src/includes/OISJoystick.h"
+    "src/includes/OISKeyboard.h"
+    "src/includes/OISMouse.h"
+    "src/includes/OISObject.h"
+    "src/includes/OISPrereqs.h"
+    "src/includes/win32/Win32ForceFeedback.h"
+    "src/includes/win32/Win32InputManager.h"
+    "src/includes/win32/Win32JoyStick.h"
+    "src/includes/win32/Win32KeyBoard.h"
+    "src/includes/win32/Win32Mouse.h"
+    "src/includes/win32/Win32Prereqs.h"
+    "src/includes/OISEffect.h"
+    "src/includes/OISForceFeedback.h"
+    "src/includes/OISInterface.h"
+    "src/src/win32/extras/WiiMote/hiddevice.cpp"
+    "src/src/win32/extras/WiiMote/hiddevice.h"
+    "src/src/win32/extras/WiiMote/OISWiiMote.cpp"
+    "src/src/win32/extras/WiiMote/OISWiiMote.h"
+    "src/src/win32/extras/WiiMote/OISWiiMoteFactoryCreator.cpp"
+    "src/src/win32/extras/WiiMote/OISWiiMoteFactoryCreator.h"
+    "src/src/win32/extras/WiiMote/OISWiiMoteForceFeedback.cpp"
+    "src/src/win32/extras/WiiMote/OISWiiMoteForceFeedback.h"
+    "src/src/win32/extras/WiiMote/OISWiiMoteRingBuffer.cpp"
+    "src/src/win32/extras/WiiMote/OISWiiMoteRingBuffer.h"
+    "src/src/win32/extras/WiiMote/wiimote.cpp"
+    "src/src/win32/extras/WiiMote/wiimote.h"
+    "src/src/extras/LIRC/OISLIRC.cpp"
+    "src/src/extras/LIRC/OISLIRC.h"
+    "src/src/extras/LIRC/OISLIRCFactoryCreator.cpp"
+    "src/src/extras/LIRC/OISLIRCFactoryCreator.h"
+    "src/src/extras/LIRC/OISLIRCRingBuffer.h"
+  ]
+
+  direct_dependent_configs = [":ois-config"]
+  defines = ["OIS_NONCLIENT_BUILD"]
+  if (is_debug) { defines += ["_STLP_DEBUG"] }
+
+  include_dirs = ["src/src/win32/extras/wiimote"]
+  configs += ["//build/config/win:d3d9"]
+  configs -= ["//build/config/win:unicode" ]
+  libs = ["dinput8.lib", "dxguid.lib"]
+}

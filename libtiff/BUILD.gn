@@ -1,0 +1,67 @@
+
+config("libtiff-config") {
+  include_dirs = ["src/libtiff", "conf/win32"]
+}
+
+static_library("libtiff") {
+  sources = [
+    "src/libtiff/mkg3states.c"
+    "src/libtiff/t4.h"
+    "src/libtiff/tiff.h"
+    "src/libtiff/tiffconf.vc.h"
+    "src/libtiff/tiffio.h"
+    "src/libtiff/tiffio.hxx"
+    "src/libtiff/tiffiop.h"
+    "src/libtiff/tiffvers.h"
+    # "src/libtiff/tif_acorn.c"
+    # "src/libtiff/tif_apple.c"
+    # "src/libtiff/tif_atari.c"
+    "src/libtiff/tif_aux.c"
+    "src/libtiff/tif_close.c"
+    "src/libtiff/tif_codec.c"
+    "src/libtiff/tif_color.c"
+    "src/libtiff/tif_compress.c"
+    "src/libtiff/tif_config.vc.h"
+    "src/libtiff/tif_dir.c"
+    "src/libtiff/tif_dir.h"
+    "src/libtiff/tif_dirinfo.c"
+    "src/libtiff/tif_dirread.c"
+    "src/libtiff/tif_dirwrite.c"
+    "src/libtiff/tif_dumpmode.c"
+    "src/libtiff/tif_error.c"
+    "src/libtiff/tif_extension.c"
+    "src/libtiff/tif_fax3.c"
+    "src/libtiff/tif_fax3.h"
+    "src/libtiff/tif_fax3sm.c"
+    "src/libtiff/tif_flush.c"
+    "src/libtiff/tif_getimage.c"
+    "src/libtiff/tif_jbig.c"
+    "src/libtiff/tif_jpeg.c"
+    "src/libtiff/tif_luv.c"
+    "src/libtiff/tif_lzw.c"
+    "src/libtiff/tif_next.c"
+    "src/libtiff/tif_ojpeg.c"
+    "src/libtiff/tif_open.c"
+    "src/libtiff/tif_packbits.c"
+    "src/libtiff/tif_pixarlog.c"
+    "src/libtiff/tif_predict.c"
+    "src/libtiff/tif_predict.h"
+    "src/libtiff/tif_print.c"
+    "src/libtiff/tif_read.c"
+    "src/libtiff/tif_stream.cxx"
+    "src/libtiff/tif_strip.c"
+    "src/libtiff/tif_swab.c"
+    "src/libtiff/tif_thunder.c"
+    "src/libtiff/tif_tile.c"
+    #"src/libtiff/tif_unix.c"
+    "src/libtiff/tif_version.c"
+    "src/libtiff/tif_warning.c"
+    "src/libtiff/tif_win32.c"
+    "src/libtiff/tif_write.c"
+    "src/libtiff/tif_zip.c"
+    "src/libtiff/uvcode.h"
+  ]
+
+  configs -= ["//build/config/win:unicode"]
+  direct_dependent_configs = [":libtiff-config"]
+}

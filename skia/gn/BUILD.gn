@@ -1,0 +1,319 @@
+import("config.gni")
+import("animator.gni")
+import("core.gni")
+import("debugger.gni")
+import("flags.gni")
+import("effects.gni")
+import("gm.gni")
+import("gpu.gni")
+import("lua.gni")
+import("images.gni")
+import("opts.gni")
+import("pdf.gni")
+import("picture.gni")
+import("ports.gni")
+import("sampleapp.gni")
+import("sfnt.gni")
+import("skflate.gni")
+import("tests.gni")
+import("tools.gni")
+import("utils.gni")
+import("views.gni")
+import("xml.gni")
+import("xps.gni")
+import("sources_filters.gni")
+
+
+skia_gpu = !is_ios
+
+config("skia_config") {
+  include_dirs = [
+    "../include/animator",
+    "../include/core",
+    "../include/config",
+    "../include/device",
+    "../include/device/xps",
+    "../include/effects",
+    "../include/gpu",
+    "../include/images",
+    "../include/pathops",
+    "../include/pdf",
+    "../include/pipe",
+    "../include/ports",
+    "../include/svg",
+    "../include/text",
+    "../include/utils",
+    "../include/views",
+    "../include/views/animated",
+    "../include/views/unix",
+    "../include/xml",
+  ]
+
+  defines = [
+    "SK_SUPPORT_PDF",
+    "SK_SUPPORT_GPU",
+    "SK_SUPPORT_LEGACY_WRITEPIXELSCONFIG",
+    "SK_SUPPORT_LEGACY_GETCLIPTYPE",
+    "SK_SUPPORT_LEGACY_GETTOTALCLIP",
+    "SK_SUPPORT_LEGACY_GETTOPDEVICE",
+    "SK_SUPPORT_LEGACY_GETDEVICECAPABILITIES",
+    "SK_SUPPORT_LEGACY_COMPATIBLEDEVICE_CONFIG",
+    "SK_SUPPORT_DEPRECATED_SCALARROUND",
+    "SK_SUPPORT_LEGACY_PUBLICEFFECTCONSTRUCTORS",
+  ]
+
+  if (is_win) {
+    include_dirs += [
+      "../include/config/win",
+      "../include/utils/win",
+    ]
+    libs = ["windowscodecs.lib"]
+    defines += [
+      "SK_SUPPORT_OPENCL=0",
+      "GR_GL_FUNCTION_TYPE=__stdcall",
+      "SK_SUPPORT_XPS",
+    ]
+  }
+}
+
+config("skia_internal_config") {
+  include_dirs = [
+    "../gm",
+    "../src/effects",
+    "../src/opts",
+    "../src/lazy",
+    "../src/core",
+    "../src/gpu",
+    "../src/opts",
+    "../src/pdf",
+    "../src/ports",
+    "../src/sfnt",
+    "../src/image",
+    "../src/images",
+    "../tools/flags",
+    "../tools",
+    "../src/pipe/utils",
+    "../src/utils",
+    "../src/utils/win",
+  ]
+  defines = [
+    "SK_GAMMA_SRGB",
+    "SK_GAMMA_APPLY_TO_A8",
+    "SK_SCALAR_TO_FLOAT_EXCLUDED",
+    "SK_ALLOW_STATIC_GLOBAL_INITIALIZERS=1",
+    "SK_SUPPORT_GPU=1",
+    "SK_SUPPORT_OPENCL=0",
+    "SK_FORCE_DISTANCEFIELD_FONTS=0",
+    "SK_SCALAR_IS_FLOAT",
+    "SK_CAN_USE_FLOAT",
+    "_CRT_SECURE_NO_WARNINGS",
+    "GR_CHROME_UTILS=1",
+  ]
+  if (is_debug) {
+    defines += ["SK_DEBUG", "SK_DEVELOPER=1"]
+  } else {
+    defines += ["SK_RELEASE"]
+  }
+  
+  if (is_win) {
+    defines += [
+      "SK_ANGLE",
+      "SK_BUILD_FOR_WIN32",
+    ]
+  }
+}
+
+
+static_library("skia") {
+  set_sources_assignment_filter(skia_sources_filters)
+  sources = skia_core_sources
+  sources += skia_animator_sources
+  sources += skia_utils_sources
+  sources += skia_images_sources
+  sources += skia_effects_sources
+  sources += skia_opts_sources
+  sources += skia_ports_sources
+  sources += skia_sfnt_sources
+  sources += skia_xml_sources
+  sources += skia_pdf_sources
+  sources += skia_picture_renderer_sources
+  # gpu
+  sources += skia_gpu_sources
+  sources += skgpu_native_gl_sources
+  sources += skgpu_angle_gl_sources
+  sources += skgpu_test_sources
+  # sources += skgpu_mesa_gl_sources
+  sources += skgpu_debug_gl_sources
+  sources += skgpu_null_gl_sources
+  sources += skia_flate_sources           # skia flate
+
+  sources += skia_picture_utils_sources
+  sources += gm_expectations_sources
+  sources += skia_xps_sources
+
+  if (is_win) {include_dirs = ["../include/config/win"]}
+  if (skia_gpu) { include_dirs += ["../include/gpu", "../src/gpu"]}
+  direct_dependent_configs = [":skia_config"]
+  configs += [
+    ":skia_internal_config",
+    "//build/config/win:opengl32",
+  ]
+  deps = [
+    "//third_party/libwebp:libwebp",
+    "//third_party/zlib:zlib",
+    "//third_party/angle:libGLESv2",
+    "//third_party/angle:libEGL",
+    "//third_party/libjpeg:libjpeg",
+    "//third_party/jsoncpp:jsoncpp",
+  ]
+}
+
+static_library("skview") {
+  set_sources_assignment_filter(skia_sources_filters)
+  sources = skia_views_sources
+  sources += skia_views_animated_sources
+  direct_dependent_configs = [":skia_config"]
+  configs += [":skia_internal_config"]
+  deps = [
+    ":skia",
+    "//third_party/angle:libGLESv2",
+    "//third_party/angle:libEGL",
+  ]
+}
+
+source_set("skview_main") {
+  sources = [
+    "../src/views/win/skia_win.cpp",
+    "../src/views/win/SkOSWindow_win.cpp",
+  ]
+  deps = [
+    ":skia",
+    ":skview",
+    "//third_party/angle:libEGL",
+    "//third_party/angle:libGLESv2",
+  ]
+  configs += [":skia_internal_config"]
+  direct_dependent_configs = [":skia_config"]
+}
+
+config("skflags_config") {
+  include_dirs = ["../tools/flags"]
+}
+
+static_library("skflags") {
+  sources = skia_flags_sources
+  direct_dependent_configs = [":skflags_config"]
+  configs += [":skia_internal_config"]
+  deps = [":skia"]
+}
+
+executable("skia_gm") {
+  sources = [
+    "../gm/gmmain.cpp",
+    "../gm/system_preferences_default.cpp",
+    "../src/pipe/utils/SamplePipeControllers.h",
+    "../src/pipe/utils/SamplePipeControllers.cpp",
+  ]
+  configs += [":skia_internal_config"]
+  deps = [
+    ":skia",
+    ":skflags",
+    "//third_party/jsoncpp:jsoncpp",
+  ]
+}
+
+static_library("skia_lua") {
+  sources = skia_lua_sources
+  include_dirs = ["../third_party/lua/src"]
+}
+
+static_library("skia_samplecode") {
+  sources = skia_samplecode_sources
+  configs += [":skia_internal_config"]
+  include_dirs = [
+    "../gm",
+    "../src/utils/debugger",
+    "../third_party/lua/src",
+  ]
+  direct_dependent_configs = [":skia_config"]
+  deps = [
+    "//third_party/angle:libGLESv2",
+    "//third_party/angle:libEGL",
+    ":skia_lua",
+    ":skia",
+    ":skview",
+  ]
+}
+
+executable("skia_sample") {
+  sources = [
+    "../experimental/SkiaExamples/SkExample.h",
+    "../experimental/SkiaExamples/SkExample.cpp",
+    "../experimental/SkiaExamples/HelloSkiaExample.cpp",
+    "../src/views/win/SkOSWindow_Win.cpp",
+    "../src/views/win/skia_win.cpp",
+  ]
+  configs += [":skia_internal_config"]
+  configs -= ["//build/config/win:console"]
+  configs += ["//build/config/win:windowed"]
+  deps = [
+    "//third_party/angle:libGLESv2",
+    "//third_party/angle:libEGL",
+    ":skia_samplecode",
+    ":skia",
+    ":skflags",
+  ]
+}
+
+static_library("skia_debugger_lib") {
+  sources = skia_debugger_lib_sources
+  deps = [":skia"]
+  configs += [":skia_internal_config"]
+  include_dirs = ["../src/utils/debugger", "../debugger"]
+}
+
+config("skia_pdfviewer_lib_config") {
+  include_dirs = [
+    "../experimental/PdfViewer",
+    "../experimental/PdfViewer/inc",
+    "../experimental/PdfViewer/src",
+    "../experimental/PdfViewer/pdfparser",
+    "../experimental/PdfViewer/pdfparser/native",
+    "../experimental/PdfViewer/pdfparser/native/pdfapi",
+  ]
+}
+static_library("skia_pdfviewer_lib") {
+  sources = skia_pdf_viewer_lib_sources
+  deps = [":skia"]
+  configs += [":skia_internal_config"]
+  include_dirs = ["../src/utils/debugger", "../debugger"]
+  direct_dependent_configs = [":skia_pdfviewer_lib_config"]
+}
+
+test("skia_test") {
+  sources = skia_test_sources
+  sources += [
+    "../tools/sk_tool_utils.cpp",
+    "../tests/TDStackNesterTest.cpp",
+    "../experimental/PdfViewer/src/SkTDStackNester.h",
+    "../src/pipe/utils/SamplePipeControllers.cpp",
+  ]
+  deps = [
+    "//third_party/angle:libGLESv2",
+    "//third_party/angle:libEGL",
+    ":skia_debugger_lib",
+    ":skia_pdfviewer_lib",
+    ":skia",
+  ]
+  include_dirs = [
+    "../tools/flags",
+    "../src/utils/debugger/",
+    "../src/pipe/utils",
+  ]
+  configs += [":skia_internal_config"]
+}
+
+executable("skhello") {
+  sources = ["../tools/skhello.cpp"]
+  deps = [":skia", ":skflags"]
+}

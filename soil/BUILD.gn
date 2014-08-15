@@ -1,0 +1,21 @@
+
+config("soil-config") {
+  include_dirs = ["src/src"]
+}
+
+static_library("soil") {
+  sources = [
+    "src/src/image_DXT.c",
+    "src/src/image_helper.c",
+    "src/src/SOIL.c",
+    "src/src/stb_image_aug.c",
+    "src/src/image_DXT.h",
+    "src/src/image_helper.h",
+    "src/src/SOIL.h",
+    "src/src/stb_image_aug.h",
+    "src/src/stbi_DDS_aug.h",
+    "src/src/stbi_DDS_aug_c.h",
+  ]
+
+  direct_dependent_configs = [":soil-config"]
+}

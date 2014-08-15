@@ -1,0 +1,6 @@
+
+skia_xps_sources = [
+  "../include/device/xps/SkConstexprMath.h",
+  "../include/device/xps/SkXPSDevice.h",
+  "../src/device/xps/SkXPSDevice.cpp",
+]

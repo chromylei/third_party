@@ -1,0 +1,53 @@
+
+config("zlib-config") {
+  include_dirs = ["src"]
+}
+
+static_library("zlib") {
+  sources = [
+    "src/adler32.c",
+    "src/compress.c",
+    "src/crc32.c",
+    "src/deflate.c",
+    "src/gzclose.c",
+    "src/gzlib.c",
+    "src/gzread.c",
+    "src/gzwrite.c",
+    "src/infback.c",
+    "src/inffast.c",
+    "src/inflate.c",
+    "src/inftrees.c",
+    "src/contrib/minizip/ioapi.c",
+    "src/contrib/minizip/iowin32.c",
+    "src/trees.c",
+    "src/uncompr.c",
+    "src/contrib/minizip/unzip.c",
+    "src/contrib/minizip/zip.c",
+    "src/zutil.c",
+    "src/deflate.h",
+    "src/infblock.h",
+    "src/infcodes.h",
+    "src/inffast.h",
+    "src/inftrees.h",
+    "src/infutil.h",
+    "src/zconf.h",
+    "src/zlib.h",
+    "src/zutil.h",
+    "src/contrib/vstudio/vc10/zlib.rc",
+  ]
+
+  direct_dependent_configs = [":zlib-config"]
+  # defines = ["ZLIB_INTERNAL"]
+  # if (is_win) {
+  #  defpath = rebase_path("src/win32/zlib.def", ".", root_build_dir)
+  #  ldflags = [
+  #    "/DEF:$defpath",
+  #    "/BASE:0x5A4C0000",
+  #  ]
+  # }
+}
+
+executable("zlib_example") {
+  sources = ["src/test/example.c"]
+  deps = [":zlib"]
+}

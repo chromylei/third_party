@@ -1,0 +1,171 @@
+config("glut-config") {
+  include_dirs = ["src/include"]
+}
+
+component("freeglut") {
+  sources = [
+    "src/src/freeglut_callbacks.c",
+    "src/src/freeglut_cursor.c",
+    "src/src/freeglut_display.c",
+    "src/src/freeglut_ext.c",
+    "src/src/freeglut_font.c",
+    "src/src/freeglut_font_data.c",
+    "src/src/freeglut_gamemode.c",
+    "src/src/freeglut_geometry.c",
+    "src/src/freeglut_glutfont_definitions.c",
+    "src/src/freeglut_init.c",
+    "src/src/freeglut_input_devices.c",
+    "src/src/freeglut_joystick.c",
+    "src/src/freeglut_main.c",
+    "src/src/freeglut_menu.c",
+    "src/src/freeglut_misc.c",
+    "src/src/freeglut_overlay.c",
+    "src/src/freeglut_spaceball.c",
+    "src/src/freeglut_state.c",
+    "src/src/freeglut_stroke_mono_roman.c",
+    "src/src/freeglut_stroke_roman.c",
+    "src/src/freeglut_structure.c",
+    "src/src/freeglut_teapot.c",
+    "src/src/freeglut_videoresize.c",
+    "src/src/freeglut_window.c",
+    "src/src/freeglutdll.def",
+    "src/include/GL/freeglut.h",
+    "src/include/GL/freeglut_ext.h",
+    "src/src/freeglut_internal.h",
+    "src/include/GL/freeglut_std.h",
+    "src/src/freeglut_teapot_data.h",
+    "src/include/GL/glut.h",
+    "src/freeglut.rc",
+  ]
+
+  direct_dependent_configs = [":glut-config"]
+  defines = ["FREEGLUT_EXPORTS"]
+}
+
+
+group("freeglut_demo") {
+  deps = [
+    ":freeglut_subwin",
+    ":freeglut_callback_maker",
+    ":freeglut_fractals_random",
+    ":freeglut_fractals",
+    ":freeglut_one",
+    ":freeglut_lorenz",
+    ":freeglut_spaceball",
+    ":freeglut_smooth_opengl3",
+    ":freeglut_resizer",
+    ":freeglut_shapes",
+  ]
+}
+
+executable("freeglut_subwin") {
+  sources = [
+    "src/progs/demos/subwin/subwin.c",
+  ]
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_callback_maker") {
+  sources = [
+    "src/progs/demos/CallbackMaker/CallbackMaker.c",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_fractals_random") {
+  sources = [
+    "src/progs/demos/Fractals_random/fractals_random.c",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_fractals") {
+  sources = [
+    "src/progs/demos/Fractals/fractals.c",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_one") {
+  sources = [
+    "src/progs/demos/One/one.c",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_lorenz") {
+  sources = [
+    "src/progs/demos/Lorenz/lorenz.c",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_spaceball") {
+  sources = [
+    "src/progs/demos/spaceball/spaceball.c",
+    "src/progs/demos/spaceball/vmath.inl",
+    "src/progs/demos/spaceball/vmath.c",
+    "src/progs/demos/spaceball/vmath.h",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_smooth_opengl3") {
+  sources = [
+    "src/progs/demos/smooth_opengl3/smooth_opengl3.c",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_resizer") {
+  sources = [
+    "src/progs/demos/Resizer/Resizer.cpp",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}
+
+executable("freeglut_shapes") {
+  sources = [
+    "src/progs/demos/shapes/shapes.c",
+  ]
+
+  deps = [
+    "//third_party/glew:glew",
+    ":freeglut",
+  ]
+}

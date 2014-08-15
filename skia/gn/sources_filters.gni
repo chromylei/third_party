@@ -1,0 +1,33 @@
+
+skia_ios_sources_filters = [
+  "*_iOS.h",
+  "*_ios.cpp",
+  "*_iOS.mm",
+  "*\biOS/*",
+]
+
+skia_mac_sources_filters = [
+  "*_mac.cpp",
+  "*\bmac/*",
+]
+
+skia_android_sources_filters = [
+  "*_andorid.cpp",
+  "*\bandroid/*",
+]
+
+skia_unix_sources_filters = [
+  "*_unix.cpp",
+  "*\bunix/*",
+]
+
+skia_nacl_sources_filters = [
+  "*_nacl.cpp",
+  "*\bnacl/*",
+]
+
+skia_sources_filters = skia_ios_sources_filters
+skia_sources_filters += skia_mac_sources_filters
+skia_sources_filters += skia_android_sources_filters
+skia_sources_filters += skia_unix_sources_filters
+skia_sources_filters += skia_nacl_sources_filters

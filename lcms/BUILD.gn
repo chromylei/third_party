@@ -1,0 +1,67 @@
+config("lcms2-config") {
+  include_dirs = ["src/include"]
+  defines = ["CMS_DLL"]
+}
+
+component("lcms2") {
+  sources = [
+    "src/src/cmscam02.c"
+    "src/src/cmscgats.c"
+    "src/src/cmscnvrt.c"
+    "src/src/cmserr.c"
+    "src/src/cmsgamma.c"
+    "src/src/cmsgmt.c"
+    "src/src/cmshalf.c"
+    "src/src/cmsintrp.c"
+    "src/src/cmsio0.c"
+    "src/src/cmsio1.c"
+    "src/src/cmslut.c"
+    "src/src/cmsmd5.c"
+    "src/src/cmsmtrx.c"
+    "src/src/cmsnamed.c"
+    "src/src/cmsopt.c"
+    "src/src/cmspack.c"
+    "src/src/cmspcs.c"
+    "src/src/cmsplugin.c"
+    "src/src/cmsps2.c"
+    "src/src/cmssamp.c"
+    "src/src/cmssm.c"
+    "src/src/cmstypes.c"
+    "src/src/cmsvirt.c"
+    "src/src/cmswtpnt.c"
+    "src/src/cmsxform.c"
+    "src/src/lcms2.def"
+    "src/src/lcms2_internal.h"
+    "src/include/lcms2.h"
+    "src/include/lcms2_plugin.h"
+    "src/Projects/VC2010/resource.h"
+    "src/Projects/VC2010/lcms2.rc"
+  ]
+  defines = [
+    "CMS_DLL_BUILD"
+    "_CRT_SECURE_NO_WARNINGS"
+  ]
+
+  direct_dependent_configs = [":lcms2-config"]
+}
+
+config("lcms2_util_base-config") {
+  include_dirs = ["src/utils/common"]
+}
+
+static_library("lcms2_util_base") {
+  sources = [
+    "src/utils/common/xgetopt.c"
+    "src/utils/common/vprf.c"
+  ]
+  direct_dependent_configs = [":lcms2_util_base-config"]
+  deps = [":lcms2", "//third_party/libtiff:libtiff"]
+  forward_dependent_configs_from = deps
+}
+
+executable("tiffdiff") {
+  sources = [
+    "src/utils/tificc/tifdiff.c"
+  ]
+  deps = [":lcms2_util_base", ":lcms2"]
+}

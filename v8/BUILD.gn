@@ -1,0 +1,277 @@
+import("common.gni")
+import("v8.gni")
+import("v8test.gni")
+
+v8_i18n_library_files = "src/src/i18n.js"
+
+config("v8_config") {
+  include_dirs = ["src/include"]
+  # defines = ["V8_SHARED",  "USING_V8_SHARED"]
+}
+
+config("v8_internal_config") {
+  include_dirs = ["src/src"]
+  defines = [
+    #"ENABLE_GDB_JIT_INTERFACE"
+    # "_HAS_EXCEPTIONS=0"
+    "V8_TARGET_ARCH_IA32"
+    "ENABLE_DEBUGGER_SUPPORT"
+    "V8_DEPRECATION_WARNINGS"
+    "V8_USE_DEFAULT_PLATFORM"
+    "_CRT_RAND_S"
+    "ENABLE_DISASSEMBLER"
+    "V8_ENABLE_CHECKS"
+    "OBJECT_PRINT"
+    "VERIFY_HEAP"
+    "ENABLE_EXTRA_CHECKS"
+    "ENABLE_HANDLE_ZAPPING"
+    # "COMPRESS_STARTUP_DATA_BZ2"
+  ]
+  # defines += ["V8_SHARED",  "BUILDING_V8_SHARED"]
+}
+
+
+custom("generate_trig_table") {
+  hard_dep = true
+  script = "src/tools/generate-trig-table.py"
+  output_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  outputs = [ "$output_dir/trig-table.cc" ]
+  args = [
+    "$output_dir/trig-table.cc"
+  ]
+}
+
+custom("js2c") {
+  hard_dep = true
+  script = "src/tools/js2c.py"
+  output_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  output_file = "$output_dir/libraries.cc"
+  outputs = [output_file]
+  args = [
+    "$output_file"
+    "CORE"
+    "$v8_compress_startup_data"
+    rebase_path("src/src/runtime.js", ".", "$root_build_dir")
+    rebase_path("src/src/v8natives.js", ".", "$root_build_dir")
+    rebase_path("src/src/array.js", ".", "$root_build_dir")
+    rebase_path("src/src/string.js", ".", "$root_build_dir")
+    rebase_path("src/src/uri.js", ".", "$root_build_dir")
+    rebase_path("src/src/math.js", ".", "$root_build_dir")
+    rebase_path("src/src/messages.js", ".", "$root_build_dir")
+    rebase_path("src/src/apinatives.js", ".", "$root_build_dir")
+    rebase_path("src/src/debug-debugger.js", ".", "$root_build_dir")
+    rebase_path("src/src/mirror-debugger.js", ".", "$root_build_dir")
+    rebase_path("src/src/liveedit-debugger.js", ".", "$root_build_dir")
+    rebase_path("src/src/date.js", ".", "$root_build_dir")
+    rebase_path("src/src/json.js", ".", "$root_build_dir")
+    rebase_path("src/src/regexp.js", ".", "$root_build_dir")
+    rebase_path("src/src/arraybuffer.js", ".", "$root_build_dir")
+    rebase_path("src/src/typedarray.js", ".", "$root_build_dir")
+    rebase_path("src/src/macros.py", ".", "$root_build_dir")
+    
+  ]
+
+  if (v8_support_i18n) {
+    args += [rebase_path("$v8_i18n_library_files", ".", "$root_build_dir")]
+  }
+}
+
+custom("js2c_experimental") {
+  hard_dep = true
+  script = "src/tools/js2c.py"
+  output_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  output_file = "$output_dir/experimental-libraries.cc"
+  outputs = [ output_file ]
+  args = [
+    "$output_file"
+    "EXPERIMENTAL"
+    "$v8_compress_startup_data"
+    # v8_experimental_library_files
+    rebase_path("src/src/macros.py", ".", "$root_build_dir")
+    rebase_path("src/src/symbol.js", ".", "$root_build_dir")
+    rebase_path("src/src/proxy.js", ".", "$root_build_dir")
+    rebase_path("src/src/collection.js", ".", "$root_build_dir")
+    rebase_path("src/src/object-observe.js", ".", "$root_build_dir")
+    rebase_path("src/src/promise.js", ".", "$root_build_dir")
+    rebase_path("src/src/generator.js", ".", "$root_build_dir")
+    rebase_path("src/src/array-iterator.js", ".", "$root_build_dir")
+    rebase_path("src/src/harmony-string.js", ".", "$root_build_dir")
+    rebase_path("src/src/harmony-array.js", ".", "$root_build_dir")
+    rebase_path("src/src/harmony-math.js", ".", "$root_build_dir")
+  ]
+}
+
+static_library("v8_nosnapshot") {
+  output_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  sources = [
+    "$output_dir/trig-table.cc"
+    "$output_dir/libraries.cc"
+    "$output_dir/experimental-libraries.cc"
+    "src/src/snapshot-empty.cc"
+  ]
+  configs += [":v8_internal_config"]
+  deps = [":js2c", ":js2c_experimental", ":generate_trig_table"]
+}
+
+executable("v8_mksnapshot") {
+  hard_dep = true
+  sources = ["src/src/mksnapshot.cc"]
+  configs += [":v8_internal_config"]
+  deps = [":v8_base", ":v8_nosnapshot", "//third_party/bzip2:bzip2"]
+}
+
+custom("run_v8_mksnapshot") {
+  hard_dep = true
+  script = "//build/tools/shell/run.py"
+  output_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  output_file = "$output_dir/snapshot.cc"
+  outputs = [output_file]
+  args = [
+    "v8_mksnapshot"
+    "--log-snapshot-positions"
+    "--logfile" "$output_dir/snapshot.log"
+    "--random-seed" "$v8_random_seed"
+    "$output_file"
+  ]
+  deps = [":v8_mksnapshot"]
+}
+
+static_library("v8_snapshot") {
+  gen_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  sources = [
+    "$gen_dir/trig-table.cc"
+    "$gen_dir/libraries.cc"
+    "$gen_dir/experimental-libraries.cc"
+    "$gen_dir/snapshot.cc"
+  ]
+  deps = [
+    ":js2c",
+    ":js2c_experimental",
+    ":generate_trig_table"
+    ":run_v8_mksnapshot"
+  ]
+  configs += [":v8_internal_config"]
+}
+
+static_library("v8_base") {
+  set_sources_assignment_filter(v8_sources_filters)
+  sources = v8_base_sources
+  if (is_win) { libs = ["winmm.lib", "ws2_32.lib"]}
+  configs += [":v8_internal_config"]
+
+  if (v8_support_i18n) {
+    deps = ["//third_party/icu:icui18n", "//third_party/icu:icuuc"]
+    defines = ["V8_I18N_SUPPORT"]
+  }
+}
+
+static_library("v8") {
+  sources = [
+    "dummy.cc"
+    # "src/src/v8dll-main.cc",
+  ]
+
+  direct_dependent_configs = [":v8_config"]
+  configs += [":v8_internal_config"]
+  deps = [":v8_base", ":v8_snapshot"]
+}
+
+custom("v8_test_resources") {
+  hard_dep = true
+  script = "src/tools/js2c.py"
+  output_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  output_file = "$output_dir/resources.cc"
+  outputs = [output_file]
+  args = [
+    "$output_file"
+    "TEST"
+    "off"
+    rebase_path("src/tools/splaytree.js", ".", "$root_build_dir")
+    rebase_path("src/tools/codemap.js", ".", "$root_build_dir")
+    rebase_path("src/tools/csvparser.js", ".", "$root_build_dir")
+    rebase_path("src/tools/consarray.js", ".", "$root_build_dir")
+    rebase_path("src/tools/profile.js", ".", "$root_build_dir")
+    rebase_path("src/tools/profile_view.js", ".", "$root_build_dir")
+    rebase_path("src/tools/logreader.js", ".", "$root_build_dir")
+    rebase_path("src/test/cctest/log-eq-of-logging-and-traversal.js", ".", "$root_build_dir")
+  ]
+}
+
+test("v8_test") {
+  sources = v8_test_sources
+  gen_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  sources += ["$gen_dir/resources.cc"]
+  deps = [":v8_base", ":v8_snapshot", ":v8_test_resources"]
+  include_dirs = ["src/src"]
+  configs += [":v8_internal_config"]
+}
+
+custom("d8-js2c") {
+  hard_dep = true
+  script = "src/tools/js2c.py"
+  output_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  output_file = "$output_dir/d8-js.cc"
+  outputs = [output_file]
+  args = [
+    "$output_file"
+    "D8"
+    "off"
+    rebase_path("src/src/d8.js", ".", "$root_build_dir")
+    rebase_path("src/src/macros.py", ".", "$root_build_dir")
+  ]
+}
+
+config("v8_vtune_config") {
+  defines = ["ENABLE_VTUNE_JIT_INTERFACE"]
+}
+static_library("v8_vtune") {
+  sources = [
+    "src/src/third_party/vtune/ittnotify_config.h"
+    "src/src/third_party/vtune/ittnotify_types.h"
+    "src/src/third_party/vtune/jitprofiling.cc"
+    "src/src/third_party/vtune/jitprofiling.h"
+    "src/src/third_party/vtune/v8-vtune.h"
+    "src/src/third_party/vtune/vtune-jit.cc"
+    "src/src/third_party/vtune/vtune-jit.h"
+  ]
+  deps = [":v8_base", ":v8_snapshot"]
+  configs += [":v8_internal_config"]
+  direct_dependent_configs = [":v8_vtune_config"]
+}
+
+executable("d8") {
+  gen_dir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
+  sources = [
+    "src/src/d8.cc"
+    "src/src/d8-debug.cc"
+    "$gen_dir/d8-js.cc"
+  ]
+
+  if (is_win) { sources += ["src/src/d8-windows.cc"]}
+  if (is_posix) { sources += ["src/src/d8-posix.cc"]}
+  configs += [":v8_internal_config"]
+  deps = [":v8_vtune", ":v8_base", ":v8_snapshot", ":d8-js2c"]
+}
+
+executable("v8_lineprocessor") {
+  sources = [ "src\samples\lineprocessor.cc" ]
+  deps = [":v8"]
+}
+
+executable("v8_process") {
+  sources = [ "src\samples\process.cc" ]
+  deps = [":v8"]
+}
+
+executable("v8_shell") {
+  sources = [ "src\samples\shell.cc" ]
+  deps = [":v8"]
+}
+
+group("v8_samples") {
+  deps = [
+    ":v8_lineprocessor"
+    ":v8_process"
+    ":v8_shell"
+  ]
+}

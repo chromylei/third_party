@@ -1,0 +1,9 @@
+
+skia_debugger_lib_sources = [
+  "../src/utils/debugger/SkDebugCanvas.h",
+  "../src/utils/debugger/SkDebugCanvas.cpp",
+  "../src/utils/debugger/SkDrawCommand.h",
+  "../src/utils/debugger/SkDrawCommand.cpp",
+  "../src/utils/debugger/SkObjectParser.h",
+  "../src/utils/debugger/SkObjectParser.cpp",
+]

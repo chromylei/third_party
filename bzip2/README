@@ -1,0 +1,3 @@
+zlib is a library for the freely available, patent free, compression algorithm using the Burrows-Wheeler block sorting text compression algorithm, and Huffman coding.
+The code can be found at http://www.bzip.org/ .
+[So, is libbzip2 the same as bzlib?]

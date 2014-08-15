@@ -1,0 +1,82 @@
+
+skia_views_sources = [
+  "../include/views/SkApplication.h",
+  "../include/views/SkBGViewArtist.h",
+  "../include/views/SkEvent.h",
+  "../include/views/SkEventSink.h",
+  "../include/views/SkKey.h",
+  "../include/views/SkOSMenu.h",
+  "../include/views/SkOSWindow_Mac.h",
+  "../include/views/SkOSWindow_NaCl.h",
+  "../include/views/SkOSWindow_SDL.h",
+  "../include/views/SkOSWindow_Unix.h",
+  "../include/views/SkOSWindow_Win.h",
+  "../include/views/SkStackViewLayout.h",
+  "../include/views/SkSystemEventTypes.h",
+  "../include/views/SkTextBox.h",
+  "../include/views/SkTouchGesture.h",
+  "../include/views/SkView.h",
+  "../include/views/SkViewInflate.h",
+  "../include/views/SkWidget.h",
+  "../include/views/SkWindow.h",
+
+  "../src/views/SkBGViewArtist.cpp",
+  "../src/views/SkEvent.cpp",
+  "../src/views/SkEventSink.cpp",
+  "../src/views/SkOSMenu.cpp",
+  "../src/views/SkParsePaint.cpp",
+  "../src/views/SkProgressView.cpp",
+  "../src/views/SkStackViewLayout.cpp",
+  "../src/views/SkTagList.cpp",
+  "../src/views/SkTagList.h",
+  "../src/views/SkTextBox.cpp",
+  "../src/views/SkTouchGesture.cpp",
+  "../src/views/SkView.cpp",
+  "../src/views/SkViewInflate.cpp",
+  "../src/views/SkViewPriv.cpp",
+  "../src/views/SkViewPriv.h",
+  "../src/views/SkWidgets.cpp",
+  "../src/views/SkWindow.cpp",
+
+  # Mac
+  "../src/views/mac/SkOSWindow_Mac.mm",
+  "../src/views/mac/skia_mac.mm",
+
+  # SDL
+  "../src/views/SDL/SkOSWindow_SDL.cpp",
+
+  # *nix
+  "../src/views/unix/SkOSWindow_Unix.cpp",
+  "../src/views/unix/keysym2ucs.c",
+  "../src/views/unix/skia_unix.cpp",
+
+  # Windows
+  "../src/views/win/SkOSWindow_win.cpp",
+  "../src/views/win/skia_win.cpp",
+]
+
+skia_views_sources -= [
+  "../src/views/SDL/SkOSWindow_SDL.cpp",
+]
+
+if (is_win) {
+  skia_views_sources -= [
+    "../src/views/win/SkOSWindow_win.cpp",
+    "../src/views/win/skia_win.cpp",
+  ]
+}
+
+skia_views_animated_sources = [
+  "../include/views/animated/SkBorderView.h",
+  "../include/views/animated/SkImageView.h",
+  "../include/views/animated/SkProgressBarView.h",
+  "../include/views/animated/SkScrollBarView.h",
+  "../include/views/animated/SkWidgetViews.h",
+
+  "../src/views/animated/SkBorderView.cpp",
+  "../src/views/animated/SkImageView.cpp",
+  "../src/views/animated/SkProgressBarView.cpp",
+  "../src/views/animated/SkScrollBarView.cpp",
+  "../src/views/animated/SkStaticTextView.cpp",
+  "../src/views/animated/SkWidgetViews.cpp",
+]

@@ -1,0 +1,2 @@
+
+skia_flate_sources = ["../src/core/SkFlate.cpp"]
