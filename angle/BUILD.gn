@@ -350,26 +350,10 @@ libGLESv2_sources = [
   "src/libGLESv2/utilities.h",
 ]
 
-shared_library("libGLESv2_d3d9") {
-  sources = libGLESv2_sources
-
-  deps = [":translator", ":commit_id", ":libGLESv2_precompile", ":angle_common"]
-  if(is_debug) { defines = ["ANGLE_ENABLE_PREF"]}
-  gendir = rebase_path("$target_gen_dir", "$root_build_dir", ".")
-  include_dirs = ["src", "include", "$gendir", "src/libGLESv2"]
-  direct_dependent_configs = [":angle_config"]
-  deffile = rebase_path("src/libGLESv2/libGLESv2.def", ".", "$root_build_dir")
-  ldflags = ["/DEF:$deffile"]
-  configs += [
-    "//build/config/win:d3d11",
-    "//build/config/win:d3d9",
-    ":angle_libGLESv2_config",
-  ]
-}
-
 # user D3D11
 shared_library("libGLESv2") {
   sources = libGLESv2_sources
+  sources += ["src/libGLESv2/azer.cc"]
   deps = [":translator", ":commit_id", ":libGLESv2_precompile", ":angle_common"]
   defines = ["ANGLE_ENABLE_D3D11=1", "ANGLE_ENABLE_D3D9EX=0"]
   if(is_debug) { defines += ["ANGLE_ENABLE_PREF"]}

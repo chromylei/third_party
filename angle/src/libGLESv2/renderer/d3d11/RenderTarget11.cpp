@@ -250,7 +250,7 @@ RenderTarget11::RenderTarget11(Renderer *renderer, GLsizei width, GLsizei height
             ASSERT(SUCCEEDED(result));
         }
         else
-        {
+        {          
             D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
             rtvDesc.Format = requestedFormat;
             rtvDesc.ViewDimension = (supportedSamples == 0) ? D3D11_RTV_DIMENSION_TEXTURE2D : D3D11_RTV_DIMENSION_TEXTURE2DMS;

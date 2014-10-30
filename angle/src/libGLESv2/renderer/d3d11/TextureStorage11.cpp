@@ -265,7 +265,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, int levels, GLenum 
         desc.Usage = D3D11_USAGE_DEFAULT;
         desc.BindFlags = getBindFlags();
         desc.CPUAccessFlags = 0;
-        desc.MiscFlags = 0;
+        desc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
 
         HRESULT result = device->CreateTexture2D(&desc, NULL, &mTexture);
 

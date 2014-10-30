@@ -62,6 +62,8 @@ void glDestroyRenderer(rx::Renderer *renderer);
 
 __eglMustCastToProperFunctionPointerType __stdcall glGetProcAddress(const char *procname);
 bool __stdcall glBindTexImage(egl::Surface *surface);
+
+void glGetTexShareD3DTex(GLenum target, GLuint framebuffer, void** val);
 }
 
 #endif   // LIBGLESV2_MAIN_H_

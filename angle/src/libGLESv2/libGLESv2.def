@@ -186,3 +186,6 @@ EXPORTS
 
     ; Setting up TRACE macro callbacks
     SetTraceFunctionPointers        @180
+
+    ; for azer
+    glGetTexShareD3DTex             @300 NONAME
