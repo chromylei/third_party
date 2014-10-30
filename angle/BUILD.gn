@@ -370,8 +370,6 @@ shared_library("libGLESv2_d3d9") {
 # user D3D11
 shared_library("libGLESv2") {
   sources = libGLESv2_sources
-
-
   deps = [":translator", ":commit_id", ":libGLESv2_precompile", ":angle_common"]
   defines = ["ANGLE_ENABLE_D3D11=1", "ANGLE_ENABLE_D3D9EX=0"]
   if(is_debug) { defines += ["ANGLE_ENABLE_PREF"]}
